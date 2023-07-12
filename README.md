@@ -3,7 +3,7 @@ Here is an amended, more persuasive and informative version of the README, with 
 # Synergi - The Open Source AI Assistant Boosting Your Productivity 
 
 <p align="center">
-  <img src="https://i.imgur.com/SYJTBp2.png" width="350" alt="Synergi Logo">
+  <img src="./743747_Ai_logo____xl-beta-v2-2-2-removebg-preview.png" width="350" alt="Synergi Logo">
 </p>
 
 <p align="center">
