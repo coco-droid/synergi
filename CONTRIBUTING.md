@@ -1,5 +1,3 @@
-Here is an expanded CONTRIBUTING.md file with more details on the contribution process and Markdown design:
-
 # Contributing to Synergi  
 
 
