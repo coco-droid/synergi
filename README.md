@@ -7,8 +7,8 @@ Here is an amended, more persuasive and informative version of the README, with 
 </p>
 
 <p align="center">
-  <a href="https://github.com/synergi/synergi/stargazers"><img src="https://img.shields.io/github/stars/synergi/synergi.svg" alt="GitHub Stars"></a>
-  <a href="https://github.com/synergi/synergi/issues"><img src="https://img.shields.io/github/issues/synergi/synergi.svg" alt="GitHub Issues"></a>
+  <a href="https://github.com/synergi/stargazers"><img src="https://img.shields.io/github/stars/synergi/synergi.svg" alt="GitHub Stars"></a>
+  <a href="https://github.com/synergi/issues"><img src="https://img.shields.io/github/issues/synergi/synergi.svg" alt="GitHub Issues"></a>
 </p>
 
 Synergi is smart, productive, and personalized.
