@@ -1,4 +1,4 @@
-Here is an amended, more persuasive and informative version of the README, with added badges and design elements:
+
 
 # Synergi - The Open Source AI Assistant Boosting Your Productivity 
 
