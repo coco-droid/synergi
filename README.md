@@ -5,18 +5,18 @@ Here is an updated README reflecting the recent changes and MVP state of the Syn
 # Synergi - Your Open Source AI Assistant 🤖
 
 <p align="center">
- <img src="https://i.imgur.com/FgyAQ0f.png" width="200">
+ <img src="" width="200">
 </p>
 
 <p align="center">
   <a href="https://github.com/synergi/synergi/stargazers">
-    <img src="https://img.shields.io/github/stars/synergi/synergi?style=flat-square">
+    <img src="https://img.shields.io/github/stars/coco-droid/synergi?style=flat-square">
   </a>
   <a href="https://github.com/synergi/synergi/network/members">
-    <img src="https://img.shields.io/github/forks/synergi/synergi?style=flat-square">
+    <img src="https://img.shields.io/github/forks/coco-droid/synergi?style=flat-square">
   </a> 
   <a href="https://github.com/synergi/synergi/issues">
-    <img src="https://img.shields.io/github/issues/synergi/synergi?style=flat-square">
+    <img src="https://img.shields.io/github/issues/coco-droid/synergi?style=flat-square">
   </a>
 </p>
 
