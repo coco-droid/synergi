@@ -1,11 +1,9 @@
 
-
-Here is an updated README reflecting the recent changes and MVP state of the Synergi project:
-
 # Synergi - Your Open Source AI Assistant 🤖
 
 <p align="center">
- <img src="" width="200">
+ <img src="./743747_Ai_logo____xl-beta-v2-2-2-removebg-preview.png
+" width="200">
 </p>
 
 <p align="center">
