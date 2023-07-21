@@ -66,6 +66,7 @@ Synergi is an open source project made possible thanks to all [our awesome contr
 ## 🎁 Supporting Synergi
 
 Synergi will always be open source and free. However, you can support the project's continued development by [Open Collective](https://opencollective.com/synergi) or support me:
-[buying me a coffee ☕️](https://www.buymeacoffee.com/synergi). Thanks!
+[![Buy Me a Coffee](https://img.shields.io/static/v1?label=Buy%20Me%20a%20Coffee&message=nerdly&color=FF813F&logo=buy%20me%20a%20coffee&logoColor=white)](https://www.buymeacoffee.com/nerdly)
+. Thanks!
 
 Let's build the future of AI together - one helpful, harmless, and honest assistant at a time. 🤝
