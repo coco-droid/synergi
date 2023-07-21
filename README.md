@@ -20,7 +20,7 @@
 
 Synergi is an open source AI assistant that allows you to interact conversationally to get things done using natural language. ✨
 
-Built using [Electron](https://electronjs.org/), [React](https://reactjs.org/), [Python](https://www.python.org/), and [Flask](https://flask.palletsprojects.com/), Synergi aims to boost your productivi(https://opencollective.com/synergi)ty with an intelligent, personalized, and privacy-focused digital assistant.
+Built using [Electron](https://electronjs.org/), HTML,CSS, [Python](https://www.python.org/), and [Flask](https://flask.palletsprojects.com/), Synergi aims to boost your productivi(https://opencollective.com/synergi)ty with an intelligent, personalized, and privacy-focused digital assistant.
 
 ## 🎉 Demo
 
