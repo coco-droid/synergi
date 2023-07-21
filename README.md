@@ -2,7 +2,7 @@
 # Synergi - Your Open Source AI Assistant 🤖
 
 <p align="center">
- <img src="./743747_Ai_logo____xl-beta-v2-2-2-removebg-preview.png
+ <img src="743747_Ai_logo____xl-beta-v2-2-2-removebg-preview.png
 " width="200">
 </p>
 
@@ -53,7 +53,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for ways to contribute.
 
 ## 🧠 Core Features
 
-- **Natural language processing** - Understand natural language requests using Claude
+- **Natural language processing** - Understand natural language requests using Claude and "PI coming Soon"
 - **Task scheduling** - Set reminders, automate workflows
 - **Voice interactions** - Speech synthesis and recognition
 - **Personalization** - Adapt to your preferences over time
@@ -65,6 +65,7 @@ Synergi is an open source project made possible thanks to all [our awesome contr
 
 ## 🎁 Supporting Synergi
 
-Synergi will always be open source and free. However, you can support the project's continued development by [buying me a coffee ☕️](https://www.buymeacoffee.com/synergi). Thanks!
+Synergi will always be open source and free. However, you can support the project's continued development by ![Open Collective](https://opencollective.com/static/images/badge.svg)](https://opencollective.com/) or support me:
+[buying me a coffee ☕️](https://www.buymeacoffee.com/synergi). Thanks!
 
 Let's build the future of AI together - one helpful, harmless, and honest assistant at a time. 🤝
