@@ -1,52 +1,72 @@
 
-
-# Synergi - The Open Source AI Assistant Boosting Your Productivity 
+# Synergi - Your Open Source AI Assistant 🤖
 
 <p align="center">
-  <img src="./743747_Ai_logo____xl-beta-v2-2-2-removebg-preview.png" width="350" alt="Synergi Logo">
+ <img src="743747_Ai_logo____xl-beta-v2-2-2-removebg-preview.png
+" width="200">
 </p>
 
 <p align="center">
-  <a href="https://github.com/synergi/stargazers"><img src="https://img.shields.io/github/stars/synergi/synergi.svg" alt="GitHub Stars"></a>
-  <a href="https://github.com/synergi/issues"><img src="https://img.shields.io/github/issues/synergi/synergi.svg" alt="GitHub Issues"></a>
+  <a href="https://github.com/synergi/synergi/stargazers">
+    <img src="https://img.shields.io/github/stars/coco-droid/synergi?style=flat-square">
+  </a>
+  <a href="https://github.com/synergi/synergi/network/members">
+    <img src="https://img.shields.io/github/forks/coco-droid/synergi?style=flat-square">
+  </a> 
+  <a href="https://github.com/synergi/synergi/issues">
+    <img src="https://img.shields.io/github/issues/coco-droid/synergi?style=flat-square">
+  </a>
 </p>
 
-Synergi is smart, productive, and personalized.
+Synergi is an open source AI assistant that allows you to interact conversationally to get things done using natural language. ✨
 
-Interact with Synergi in natural language via voice or text to get more done in your day. Synergi learns from your interactions and preferences to adapt its responses and suggestions, making your digital life easier and more efficient.
+Built using [Electron](https://electronjs.org/), HTML,CSS, [Python](https://www.python.org/), and [Flask](https://flask.palletsprojects.com/), Synergi aims to boost your productivity with an intelligent, personalized, and privacy-focused digital assistant.
 
-Thanks to its open-source nature and AI capabilities, Synergi's modular architecture allows for easy integration of language processing, speech synthesis, task scheduling capabilities, and more.
+## 🎉 Demo
 
-## Features
+Coming soon!
 
-- **Natural Language Understanding**: Synergi understands and responds to your commands in a natural, conversational manner.
-- **Task Scheduling**: Set reminders, schedule appointments, and never miss a deadline with Synergi's task management features.
-- **Speech Synthesis**: Synergi can speak out responses, making it a perfect hands-free companion.
-- **Personalized Experience**: Synergi learns from your interactions to provide a tailored user experience.
+## 🚀 Getting Started
 
-## Getting Started
+### Installation
 
-1. Clone the repository:
-```bash
+```
 git clone https://github.com/synergi/synergi.git
-```
-2. Navigate to the project directory:
-```bash
 cd synergi
-```
-3. Install the dependencies:
-```bash
-pip install -r requirements.txt
-```
-4. Run Synergi:
-```bash
-python main.py
+yarn install
+pip install -r requirements.txt 
 ```
 
-## Contributing
+### Usage
 
-We welcome contributions from the open-source community. Please read our [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to contribute to this project.
+```
+# Start frontend
+yarn start
 
-Join us in making Synergi the best open-source AI assistant for Linux!
+# Start backend (separate terminal) 
+python server.py
+```
 
----
+The GUI will launch automatically. You can now interact with Synergi!
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for ways to contribute.
+
+## 🧠 Core Features
+
+- **Natural language processing** - Understand natural language requests using Claude and "PI coming Soon"
+- **Task scheduling** - Set reminders, automate workflows
+- **Voice interactions** - Speech synthesis and recognition
+- **Personalization** - Adapt to your preferences over time
+- **Modular architecture** - Built for extensibility 
+
+## 👥 Project Contributors
+
+Synergi is an open source project made possible thanks to all [our awesome contributors](https://github.com/synergi/synergi/graphs/contributors). Join us!
+
+## 🎁 Supporting Synergi
+
+Synergi will always be open source and free. However, you can support the project's continued development by [Open Collective](https://opencollective.com/synergi) or support me:
+[![Buy Me a Coffee](https://img.shields.io/static/v1?label=Buy%20Me%20a%20Coffee&message=nerdly&color=FF813F&logo=buy%20me%20a%20coffee&logoColor=white)](https://www.buymeacoffee.com/nerdly)
+. Thanks!
+
+Let's build the future of AI together - one helpful, harmless, and honest assistant at a time. 🤝
