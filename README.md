@@ -1,7 +1,11 @@
 
 # Synergi - Your Open Source AI Assistant 🤖
 
- ![Alt text](./743747_Ai_logo____xl-beta-v2-2-2-removebg-preview.png)
+<p align="center">
+ <img src="./743747_Ai_logo____xl-beta-v2-2-2-removebg-preview.png
+ <img src="743747_Ai_logo____xl-beta-v2-2-2-removebg-preview.png
+" width="200">
+</p>
 
 
 <p align="center">
