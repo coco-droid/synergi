@@ -6,35 +6,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
 <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Lato'><link rel="stylesheet" href="./style.css">
 <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@floating-ui/core@1.3.1"></script>
+<script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.4.5"></script>
+<script src="https://kit.fontawesome.com/58115e4ecb.js" crossorigin="anonymous"></script>
 </head>
-<body>
+<body class="dropzone" id="dropzonewidget" >
 <!-- partial:index.partial.html -->
-<div class="--dark-theme" id="chat" style="display: none;">
+<div class="--dark-theme" id="chat" style="display: none; height:100vh;" >
     <div class="chat__conversation-board " >
+      <div class="chat__conversation-board__message-container">
+        <div class="chat__conversation-board__message__context">
+          <div class="chat__conversation-board__message__bubble"> 
+            <span style=" background-color: #9991f698;"><bold>Goal:</bold>Generate Task
+              <!--task-->
+              <div class="task_box">
+                    <span style="background-color:transparent;">Steps</span>
+                    <div class="task_me">
+                       <span style="background-color:transparent;">Task 1</span>
+                       <i class="fa-solid fa-spinner fa-spin"></i>
+                    </div>
+                    <div class="task_me" >
+                      <span style="background-color:transparent;">Task 2</span>
+                      <i class="fa-solid fa-spinner fa-spin"></i>
+                    </div>
+                    <div class="task_me">
+                      <span style="background-color:transparent;">Task 3</span>
+                      <i class="fa-solid fa-spinner fa-spin"></i>
+                    </div>
+            </div>
+            </span>
+          </div>
+        </div>
       </div>
-  <div class="chat__conversation-panel">
-    <div class="chat__conversation-panel__container">
-      <button class="chat__conversation-panel__button panel-item btn-icon add-file-button">
-        <svg class="feather feather-plus sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <line x1="12" y1="5" x2="12" y2="19"></line>
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-        </svg>
-      </button>
-      <button class="chat__conversation-panel__button panel-item btn-icon emoji-button">
-        <svg class="feather feather-smile sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"></circle>
-          <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
-          <line x1="9" y1="9" x2="9.01" y2="9"></line>
-          <line x1="15" y1="9" x2="15.01" y2="9"></line>
-        </svg>
-      </button>
-      <input class="chat__conversation-panel__input panel-item" placeholder="Type a message..."/>
-      <button class="chat__conversation-panel__button panel-item btn-icon send-message-button">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-reactid="1036">
-          <line x1="22" y1="2" x2="11" y2="13"></line>
-          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-        </svg>
-      </button>
+    </div>
+  <div class="chat__conversation-panel" style="background: transparent;">
+    <div class="chat__conversation-panel__container" style="display: flex;flex-direction:column; background-color: var(--chat-panel-background); padding:10px;border-radius:12px;">
+      <div class="file_preview" style="padding:5px;background-color: rgba(0, 0, 0, 0.37);display: none;max-height:60%;min-width: fit-content; max-width:80%;"></div>
+      <div class="send-message-container">
+        <textarea class="message-input" rows="2" placeholder="Type your message here"></textarea>
+        <button class="chat__conversation-panel__button panel-item btn-icon send-message-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-reactid="1036">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -67,9 +83,32 @@
 </div>
 <button class="btn">Start</button>
 </div>
+<!-- <button class="chat__conversation-panel__button panel-item btn-icon add-file-button">
+        <svg class="feather feather-plus sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+      </button>
+      <button class="chat__conversation-panel__button panel-item btn-icon emoji-button">
+        <svg class="feather feather-smile sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+          <line x1="9" y1="9" x2="9.01" y2="9"></line>
+          <line x1="15" y1="9" x2="15.01" y2="9"></line>
+        </svg>
+      </button>
+      <input class="chat__conversation-panel__input panel-item" placeholder="Type a message..."/>
+      <button class="chat__conversation-panel__button panel-item btn-icon send-message-button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-reactid="1036">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+      </button>-->
 <!-- partial -->
   <script  src="./script.js"></script>
 <script>
+let filepreview ,filebol;
+let file_preview=document.querySelector('.file_preview');
   // Client side 
 const socket = io('http://localhost:5000');
 
@@ -80,10 +119,19 @@ socket.on('connect', () => {
 socket.on('message', (data) => {
   displayMessage(data,'bot');
 });
+socket.on('task',(data)=>{
+  displayMessage(data,'task');
+})
+socket.on('task_update',(data)=>{
+  console.log(data);
+  document.getElementById(data.id).innerHTML=data.title;
+})
+
+
 //function send message
 function sendMessage() {
   //get message from input
-  const message = document.querySelector('.chat__conversation-panel__input').value;
+  const message = document.querySelector('.message-input').value;
   //check if message is empty
   if (!message) return;
   //display message in the chat
@@ -124,11 +172,79 @@ function displayMessage(data, type) {
           </div>
         </div>`
       }
+      else if (type=="user" && filebol==true)
+      {
+        file_preview.style.display='none';
+        document.querySelector('.chat__conversation-board').innerHTML +=`
+        <div class="chat__conversation-board__message-container reversed">
+          <div class="chat__conversation-board__message__context">
+            <div class="chat__conversation-board__message__bubble"> <span style="background-color:#f52cf580;">
+              <div style="display:flex; padding:5px;" class='preview-chat'>
+                   ${filepreview}
+              </div>
+              ${data.message}</span></div>
+          </div>
+          <div class="chat__conversation-board__message__options">
+            <button class="btn-icon chat__conversation-board__message__option-button option-item emoji-button">
+              <svg class="feather feather-smile sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                <line x1="15" y1="9" x2="15.01" y2="9"></line>
+              </svg>
+            </button>
+            <button class="btn-icon chat__conversation-board__message__option-button option-item more-button">
+              <svg class="feather feather-more-horizontal sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="1"></circle>
+                <circle cx="19" cy="12" r="1"></circle>
+                <circle cx="5" cy="12" r="1"></circle>
+              </svg>
+            </button>
+          </div>
+        </div>
+        `
+      }
+      else if (type=="task"){
+        /* data.tasks:
+       {
+        Goal:"",
+        tasks:
+        [
+          {
+            id:"",
+            title:""
+          },
+          ...
+        ]
+        }
+        */
+       let tasks_html='';
+       for(var i=0; i<=data.tasks; i++)
+       {
+         tasks_html+=`
+         <div class="task_me">
+           <span style="background-color:transparent; id="${data.tasks[i].id}">${data.tasks[i].title}</span>
+           <i class="fa-solid fa-spinner fa-spin"></i>
+          </div>
+         `;
+       }
+       document.querySelector('.chat__conversation-board').innerHTML=`
+       <div class="chat__conversation-board__message-container">
+        <div class="chat__conversation-board__message__context">
+          <div class="chat__conversation-board__message__bubble"> 
+            <span style=" background-color: #9991f698;"><bold>Goal:</bold>${data.Goal}
+              <!--task-->
+              <div class="task_box">
+                 ${tasks_html}
+            </div>
+            </span>
+          </div>
+        </div>
+      </div>
+       `;
+      }
       else{
         document.querySelector('.chat__conversation-board').innerHTML += ` <div class="chat__conversation-board__message-container reversed">
-          <div class="chat__conversation-board__message__person">
-            <span class="chat__conversation-board__message__person__nickname">Dennis Mikle</span>
-          </div>
           <div class="chat__conversation-board__message__context">
             <div class="chat__conversation-board__message__bubble"> <span style="background-color:#f52cf580;">${data.message}</span></div>
           </div>
@@ -151,6 +267,9 @@ function displayMessage(data, type) {
           </div>
         </div>`
       }
+      //auto scroll
+      var chat_board=document.querySelector('.chat__conversation-board');
+      chat_board.scrollTop=chat_board.scrollHeight;
 }
 //listen for click on send message button
 document.querySelector('.send-message-button').addEventListener('click', sendMessage);
@@ -160,6 +279,176 @@ document.querySelector('.btn').addEventListener('click', function(){
 }
 
 );
+
+// dropzone 
+const supportsFileSystemAccessAPI =
+  "getAsFileSystemHandle" in DataTransferItem.prototype;
+const supportsWebkitGetAsEntry =
+  "webkitGetAsEntry" in DataTransferItem.prototype;
+
+const elem = document.querySelector("#chat");
+//const debug = document.querySelector("body");
+
+elem.addEventListener("dragover", (e) => {
+  // Prevent navigation.
+  e.preventDefault();
+});
+
+elem.addEventListener("dragenter", (e) => {
+  elem.style.outline = "solid red 1px";
+});
+
+elem.addEventListener("dragleave", (e) => {
+  elem.style.outline = "";
+});
+
+elem.addEventListener("drop", async (e) => {
+  e.preventDefault();
+  elem.style.outline = "";
+  const fileHandlesPromises = [...e.dataTransfer.items]
+    .filter((item) => item.kind === "file")
+    .map((item) =>
+      supportsFileSystemAccessAPI
+        ? item.getAsFileSystemHandle()
+        : supportsWebkitGetAsEntry
+        ? item.webkitGetAsEntry()
+        : item.getAsFile()
+    );
+
+  for await (const handle of fileHandlesPromises) {
+    if (handle.kind === "directory" || handle.isDirectory) {
+      console.log(`Directory: ${handle.name}`);
+      //debug.textContent += `Directory: ${handle.name}\n`;
+    } else {
+      filebol=true;
+      console.log(`File: lol ${handle.name}`);
+      //file preview in tippy tooltip on top of the chat conversational board
+      const file = await handle.getFile();
+      const reader = new FileReader();
+      function typeFile(ext){
+        //detect if .txt:txt.png,.doc:doc.png,.pdf:pdf.png, or it other use file.png
+        if(ext[1]=="txt"){
+          return "txt.png";
+        }
+        else if(ext[1]=="doc"){
+          return "doc.png";
+        }
+        else if(ext[1]=="pdf"){
+          return "pdf.png";
+        }
+        else{
+          return "file.png";
+        }
+      }
+      filepreview=`
+                 <div class="file_ext" style="display:flex;align-items:center;justify-content:center;padding:1px;">
+                    <img src="${typeFile(file.name.split('.'))}" style="height:100%;"/>
+                  </div>
+                  <div class="file_name">
+                    <span style="background:transparent;margin:0;">${file.name}</span>
+                    <span style="background:transparent;font-size:0.7rem;margin:0;">${file.size}</span>
+                  </div>
+                  <span style="height:100%;color:#ffffff4f;align-items:center;display:flex;background:transparent;">
+                    <i class="fa-solid fa-xmark" "></i>
+                  </span>
+      `;
+      //display file preview like a floating tooltip on top of the chat conversational board
+        var chat_board=document.querySelector('.chat__conversation-panel');
+        file_preview.innerHTML=filepreview;
+        //get chat board height
+        var chat_board_height=chat_board.offsetHeight;
+        //position the file preview tooltip
+        //file_preview.style.top=chat_board.offsetTop-chat_board_height-10+"px";
+        file_preview.style.height=50+"px";
+        //file_preview.style.left=chat_board.offsetLeft+9+"px";
+        //file_preview.style.position="absolute";
+        //z-index
+       // file_preview.style.zIndex="1000";
+        //display file preview  
+        file_preview.style.display="flex";
+        document.querySelector('#close').addEventListener('click',()=>{
+          file_preview.style.display='none';
+          filepreview='';
+        })
+                }
+  }
+});
 </script>
+<style>
+  .preview-chat{
+    display: flex;
+    padding: 5px;
+    height: 50px;
+    max-height: 100px;
+    min-width: fit-content;
+    background-color: rgba(0, 0, 0, 0.37);
+    max-width: 60%;
+    border-radius: 12px;
+  }
+  .preview-chat>.file_name
+  {
+    padding: 0;
+  }
+  .file_preview>span i{
+    display:flex;
+    
+  }
+  .preview-chat>span i
+  {
+    display: none;
+  }
+  .preview-chat>.file_name  span
+  {
+    margin: 0;
+  }
+ .chat__conversation-board__message__context  img
+{
+}
+.send-message-container {
+    display: flex;
+    align-items: center;
+    /*background-color: #f5f5f5;*/
+    background-color: var(--chat-panel-background);
+    padding: 10px;
+    border-radius: 12px;
+    width: 100%;
+    max-height: 60%;
+}
+.file_preview {
+  width: 100%;
+  height: 50px;
+  /*align-self: flex-start;
+  /*background-color: #fff;
+  border: 1px solid #ccc;*/
+  margin-right:15%;
+  background-color: transparent;
+  border-radius: 5px;
+}
+.message-input {
+  flex: 1;
+  /*min-height: 50px;*/
+  max-height: 100%;
+  padding: 10px;
+  border: none;
+  color: #cdc8c8b0;
+  outline: none;
+  resize: none; /* disable resizing */
+  background-color: var(--chat-panel-background);
+}
+
+.message-input::-webkit-scrollbar {
+  display: none;
+}
+
+.send-message-button {
+  margin-left: 10px;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+</style>
 </body>
 </html>
