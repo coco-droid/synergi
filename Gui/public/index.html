@@ -9,11 +9,13 @@
 <script src="https://cdn.jsdelivr.net/npm/@floating-ui/core@1.3.1"></script>
 <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.4.5"></script>
 <script src="https://kit.fontawesome.com/58115e4ecb.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/siriwave/dist/siriwave.umd.min.js"></script>
 </head>
 <body class="dropzone" id="dropzonewidget" >
 <!-- partial:index.partial.html -->
 <div class="--dark-theme" id="chat" style="display: none; height:100vh;" >
-    <div class="chat__conversation-board " >
+  <i class="fa-solid fa-clock-rotate-left"></i>
+  <div class="chat__conversation-board " >
       <div class="chat__conversation-board__message-container">
         <div class="chat__conversation-board__message__context">
           <div class="chat__conversation-board__message__bubble"> 
@@ -59,14 +61,14 @@
     <span></span><img style="width: 150px; height:150px;" src="preview.png"/></span>
     <span style="text-align: center; color:#fff;">Synergi</span>
   </div>
-<div   class="bubble_box">
- <div class="bubble__context">
-   <div class="bubble_text"> <span>Welcome to Synergi! 👋 I'm your personal AI assistant ready to help boost your productivity.</span></div>
+<div class="bubble_box ">
+ <div class="bubble__context ">
+   <div class="bubble_text"> <span class="bubble1">Welcome to Synergi! 👋 I'm your personal AI assistant ready to help boost your productivity.</span></div>
  </div>
 </div>
 <div class="bubble_box">
- <div class="bubble__context">
-   <div class="bubble_text"> <span>I can understand natural language requests and accomplish tasks like:
+ <div class="bubble__context ">
+   <div class="bubble_text "> <span class="bubble2">I can understand natural language requests and accomplish tasks like:
 
      Scheduling meetings 🗓️
      Taking notes 📝
@@ -80,7 +82,11 @@
      
      Let's get started - how can I help you today? 😊</span></div>
  </div>
+
 </div>
+<div class="wave-container"></div>
+<audio id="audio1"src="./talk1.mp3"></audio>
+<audio id="audio2"src="./talk2.mp3"></audio>
 <button class="btn">Start</button>
 </div>
 <!-- <button class="chat__conversation-panel__button panel-item btn-icon add-file-button">
@@ -138,6 +144,7 @@ function sendMessage() {
   displayMessage({message: message}, 'user');
   //emit message to server
   socket.emit('message', {sendMessage: message});
+
   //clear input
   document.querySelector('.chat__conversation-panel__input').value = '';
 }
@@ -147,9 +154,6 @@ function displayMessage(data, type) {
   //display message in the chat
    document.querySelector('.chat__conversation-board').innerHTML += `
    <div class="chat__conversation-board__message-container">
-          <div class="chat__conversation-board__message__person">
-            <div class="chat__conversation-board__message__person__avatar"></div><span class="chat__conversation-board__message__person__nickname">Monika Figi</span>
-          </div>
           <div class="chat__conversation-board__message__context">
             <div class="chat__conversation-board__message__bubble"> <span style=" background-color: #9991f698;">${data.message}</span></div>
           </div>
@@ -279,7 +283,12 @@ document.querySelector('.btn').addEventListener('click', function(){
 }
 
 );
+document.querySelector('.fa-clock-rotate-left').onclick=function(){
+socket.emit('get_history',{});}
+  socket.on('history',(data)=>{
+    console.log(data);
 
+  });
 // dropzone 
 const supportsFileSystemAccessAPI =
   "getAsFileSystemHandle" in DataTransferItem.prototype;
@@ -373,8 +382,69 @@ elem.addEventListener("drop", async (e) => {
                 }
   }
 });
+/*animation to sync bubble text box with sound */
+var waveContainer = document.querySelector(".wave-container");
+var wave = new SiriWave({
+  container: waveContainer,
+  width: 200,
+  height: 100,
+  style: "ios",
+  amplitude: 0.5,
+  frequency: 6,
+  color: "#fff",
+});
+  function animateBubble(element,element2, audio,callback) {
+    let text = element.textContent;
+  element.textContent = "";
+  element2.style.display="block";
+  let index = 0;
+  let duration = audio.duration * 1000; // Convert audio duration to milliseconds
+
+  // Calculate the delay between displaying each character based on audio duration
+  let charDelay = duration / text.length;
+  audio.play()
+  element.style.opacity = 1;
+  wave.start();
+  function typeWriter() {
+    if (index < text.length) { 
+      element.textContent += text.charAt(index);
+      index++;
+      setTimeout(typeWriter, charDelay);
+      //detect when the audio finish
+    } else {
+      // Show wave animation and sync with audio
+      element.style.opacity = 1;
+      wave.start();
+    }
+  }
+ typeWriter();
+ audio.addEventListener('ended',()=>{
+        //element.style.opacity = 0;
+        callback();
+      })
+}
+// Call the animateBubble function for each bubble box
+let bubble1 = document.querySelector(".bubble1");
+document.querySelector("#dropzonewidget > div.--dark-theme.first > div:nth-child(1) > img").onclick=function(){
+  let audio1 = document.getElementById("audio1");
+animateBubble(bubble1,document.querySelectorAll('.bubble_box')[0],audio1,()=>{
+  var bubble2 = document.querySelector(".bubble2");
+var audio2 = document.getElementById("audio2");
+animateBubble(bubble2,document.querySelectorAll('.bubble_box')[1],audio2,()=>{
+  console.log('finish!')
+});
+});}
 </script>
+
 <style>
+  .bubble_box
+  {
+    display:none;
+  }
+  .fa-clock-rotate-left
+  {
+    color:#fff;
+  }
   .preview-chat{
     display: flex;
     padding: 5px;

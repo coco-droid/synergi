@@ -245,7 +245,17 @@ body {
   font-family: "Lato", sans-serif;
   resize: none;
 }
-
+/*stylish scroll bar*/
+#chat .chat__conversation-board::-webkit-scrollbar {
+  width: 1px;
+}
+#chat .chat__conversation-board::-webkit-scrollbar-track {
+  background: transparent;
+}
+#chat .chat__conversation-board::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 10px;
+}
 @media only screen and (max-width: 600px) {
   #chat {
     margin: 0;
