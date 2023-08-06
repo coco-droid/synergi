@@ -20,6 +20,7 @@ function createWindow () {
         frame: false,
         x: screen.getPrimaryDisplay().workAreaSize.width - 400, // Add this line to set the window to the right of the screen
         y: 0, // Add this line to set the window to the top of the screen
+        icon: path.join(__dirname, 'public/preview.png'),
         webPreferences: {
             nodeIntegration: true
         }
