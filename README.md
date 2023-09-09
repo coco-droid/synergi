@@ -1,7 +1,7 @@
 
 # Synergi - Your Open Source AI Assistant 🤖
 
- ![Alt text](./743747_Ai_logo____xl-beta-v2-2-2-removebg-preview.png)
+ ![Alt text](./logo.png)
 
 <p align="center">
   <a href="https://github.com/synergi/synergi/stargazers">
