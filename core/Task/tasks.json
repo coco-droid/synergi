@@ -1,0 +1,29 @@
+[
+    {
+        "title": "T\u00e2che 1",
+        "description": "Description de la t\u00e2che 1",
+        "depends_on": null,
+        "async": false,
+        "scheduled": null,
+        "inputs": null,
+        "outputs": ""
+    },
+    {
+        "title": "T\u00e2che 2",
+        "description": "Description de la t\u00e2che 2",
+        "depends_on": 0,
+        "async": false,
+        "scheduled": null,
+        "inputs": null,
+        "outputs": ""
+    },
+    {
+        "title": "T\u00e2che 3",
+        "description": "Description de la t\u00e2che 3",
+        "depends_on": 1,
+        "async": false,
+        "scheduled": null,
+        "inputs": "",
+        "outputs": ""
+    }
+]

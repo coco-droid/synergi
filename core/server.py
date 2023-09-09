@@ -1,7 +1,14 @@
 from flask import Flask, request, render_template
 from flask_socketio import SocketIO, emit
 from agent.synergi import SynergiAgent
+from agent.contextual import ContextConversation
+from others.og import OpenGraphScraper
+from werkzeug.utils import secure_filename
+import json
+import os
+#launch redis-server  in another console
 
+print("redis is launch")
 app = Flask(__name__)
 socketio = SocketIO(app)
 synergi = SynergiAgent()
@@ -25,6 +32,66 @@ def handle_message(msg,socketio=socketio):
     response = "Désolé, une erreur s'est produite lors du traitement de votre requête."
 
   emit('message', {'message': response})
+@socketio.on('delete_history')
+def delete_history(msg):
+  print(f"Received : {msg}")
+  response = ContextConversation()
+  res=response.delete_date_conversation_on_redis(msg['date'])
+  emit('history_deleted', {'message': 'deleted'})
+@socketio.on('get_history')
+def get_history(msg):
+  print(f"Received message: {msg}")
+  if msg['req']=="date":
+    response = ContextConversation()
+    res=response.get_conversation_dates() 
+    emit('history', {'message': res})  
+  else:
+    response = ContextConversation()
+    res=response.get_conversation(msg['date'])
+    emit('history', {'message': res})
+@socketio.on('with_file')
+async def on_file(data):
+  print(f"Received file: {data['name']}")
+  file_path = os.path.join('./uploads', data['name'])
+  with open(file_path, 'wb') as f:
+    await f.write(data['data'])
+  print(f"File saved: {file_path}") 
+@socketio.on('opengraph')
+def read_scrape(urls):
+    urls=urls['url']
+    print(urls)
+    response={}
+    #loop through urls
+    for url in urls:
+      scraper = OpenGraphScraper(url)
+      og_data = scraper.get_opengraph_data()
+      response[url]=og_data
+    print('Trace:')
+    print(response)
+    # detect if the response object is empty
+    if  bool(response):
+       emit('opengraph_data',response)
+
+UPLOAD_FOLDER = 'uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part'})
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'})
+
+    filename = secure_filename(file.filename)
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    file.save(file_path)
+    file_url = file_path  # Replace with your domain and path
+    return json.dumps({'success': True, 'file': {'url': file_url}})
+
+
 
 @app.route('/api', methods=['POST'])  
 def api_message():

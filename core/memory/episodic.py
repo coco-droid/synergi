@@ -1,36 +1,70 @@
-from sentence_transformers import SentenceTransformer
 import pinecone
-
+import openai
+import time 
 class EpisodicMemory:
-
-  def __init__(self, index_name, api_key=None):
-    self.index_name = index_name
-    self.api_key = '5c61b38c-3e37-44f3-881c-5a4ba7ddcf0b'
-
-    # Charge le modèle sentence-transformers
-    self.model = SentenceTransformer('distilbert-base-nli-stsb-mean-tokens')
-
-  def encode(self, experience):
-    # Génère l'embedding 
-    embedding = self.model.encode(experience)
-    return embedding
-
-  def retrieve(self, query):
+    def __init__(self,index):
+        self.pinecone_api_key = "8d5389f5-d30a-424b-a780-393ca5bcccfb"
+        self.openai_api_key = "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"
+        self.pinecone_index = "episodic"
+        self.memory = []
+        
+        # Initialize Pinecone client
+        pinecone.init(api_key=self.pinecone_api_key,
+         environment='gcp-starter' 
+        )
+        self.index=index = pinecone.Index('episodic')
+        # Set OpenAI API key
+        openai.api_key = self.openai_api_key
+        
+    def store_message(self, user_message):
+        text_encoded_message = self.get_embedding(user_message)
+        vector_data = [{'id': user_message, 'values': text_encoded_message}]
+        self.index.upsert(vectors=vector_data)
+        
+    def search_memory(self, query):
+        query_embedding = self.get_embedding(query)
+        results = self.index.query(query_embedding, top_k=5)['matches']
+        results = [result.id for result in results]
+        print(f"response to:{query} is:{results}")
+        #loop through results and decode them
+        for i in range(len(results)):
+            results[i]=self.decode(results[i])
+            print(results[i])
+        return results
+        
+    def get_embedding(self, text):
+        print(f"Generating embedding for: {text}")
+        response = openai.Embedding.create(model="text-embedding-ada-002", input=text)
+        print(f"embed:{response['data'][0]['embedding']}")
+        return response['data'][0]['embedding']
+        
+    def process_user_input(self, user_input):
+        self.store_message(user_input)
+        search_query = self.generate_search_query(user_input)
+        search_results = self.search_memory(search_query)
+        # Apply logic to prioritize frequently accessed data
+        
+        return search_results
     
-    # Encode la requête
-    query_embedding = self.encode(query)
-
-    results = pinecone.query(index_name=self.index_name,
-                       query=[query_embedding],
-                       top_k=10,
-                       api_key=self.api_key)
-
-    return results.ids
-
-  # autres méthodes...
-
-  def save(self, vector, key):
-    pinecone.upsert(self.index_name, [vector], [key], api_key=self.api_key)  
+    def generate_search_query(self, user_input):
+        # Implement logic to extract keywords from user input for search
+        keywords = self.extract_keywords(user_input)
+        return " ".join(keywords)
     
-  def delete(self, key):
-    pinecone.delete(self.index_name, [key], api_key=self.api_key)
+    def extract_keywords(self, text):
+        # Implement logic to extract keywords from user input
+        # This could involve natural language processing techniques
+        
+        return keywords
+    def decode (self,encoded_message):
+        response = openai.Completion.create(model="text-embedding-ada-002", prompt=encoded_message)
+        return response.choices[0].text
+    def close(self):
+        pinecone.deinit()
+
+# Replace with your actual Pinecone and OpenAI API keys
+
+
+
+# Close the agent
+#agent.close()

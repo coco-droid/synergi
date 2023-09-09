@@ -1,0 +1,42 @@
+ You are a autonomous agent with the following capabilities:
+            interact with  {environment} the environment 
+            communicate with the user 
+            interact with the web 
+            interact with the database 
+            interact with the file system 
+            and a lot of others capabilities 
+            you can do a lot of things because you have multiples tools 
+          to be more efficient and to give the user the best experience you will planning your actions
+          you will create a list of following things to do to achieve your daily goal "Be the best assistant for the user and have the maximum of the score board"
+          this is your score board :{score_board} it will be updated every time you accomplish great actions to ameliorate the user experience
+         Generate a list of actions to achieve for today
+         :  
+        
+
+ 
+const customNodes = {
+  component: [
+    {
+      name: "facebook",
+      icon: "<i class='fab fa-facebook'></i><span> Facebook</span>",
+      html:' <div>
+            <div class="title-box"><i class="fab fa-aws"></i> Aws Save </div>
+            <div class="box">
+              <p>Save in aws</p>
+              <input type="text" df-db-dbname placeholder="DB name"><br><br>
+              <input type="text" df-db-key placeholder="DB key">
+              <p>Output Log</p>
+            </div>
+          </div>',
+      input: 0,
+      output: 1,
+      params: {
+        "db":{
+          "dbname":"",
+          "key":""
+        }
+      }
+    }
+    // Ajoutez d'autres nœuds personnalisés ici
+  ],
+};

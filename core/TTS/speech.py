@@ -5,7 +5,7 @@ class Speech:
     def __init__(self, text: str, provider: Optional[str] = "elevenlabs"):
         self.text = text
         self.provider = provider
-        self.api_key = ""
+        self.api_key = "ea7d57422f947e32f7f3faac717defcf"
 
     def set_api_key(self, api_key: str):
         self.api_key = api_key

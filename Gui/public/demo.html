@@ -1,0 +1,326 @@
+<html>
+    <head>
+        <title>demo</title>
+        <script src="
+./mind-wired.js
+"></script>
+<link href="
+https://cdn.jsdelivr.net/npm/@mind-wired/core/dist/mind-wired.css
+" rel="stylesheet">
+    </head>
+    <body>
+        <div id="mindwired">
+            <canvas></canvas>
+        </div>
+    
+    </body>
+    <script>
+        const canvas = document.querySelector('canvas');
+        const ctx = canvas.getContext('2d');
+ctx.fillStyle = 'red';
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+        class Mindmap_render {
+            constructor(element, json) {
+                this.json = json;
+                this.element = element;
+                this.mwd = "";
+                this.position_node_array = [];
+                this.variation_y=100;
+                this.variation_x=120;
+            }
+            render() {
+                let the_nodes=this.generated_nodes();
+                console.log(the_nodes)
+                let kp=mindwired
+                    .init({
+                        el: this.element,
+                        ui: { width: "100%", height: 500 },
+                    })
+                    .then((instance) => {
+                        this.mwd = instance;
+                        // install nodes here
+                        this.mwd.nodes(the_nodes);
+                    });
+                console.log(kp.getCanvas())
+            }
+            generated_nodes() {
+                let nodes_generated;
+                console.log(this.json["root"]["children"]);
+                let subs_g = this.generate_sub_nodes(this.json["root"]["children"]);
+                nodes_generated = {
+                    model: {
+                        type: "text",
+                        text: this.json["root"].text,
+                    },
+                    view: {
+                        x: 0,
+                        y: 0,
+                        layout: { type: "X-AXIS" },
+                        edge: {
+                            name: "mustache_lr",
+                            color: "#9aabaf",
+                            width: 1,
+                        },
+                    },
+                    subs: subs_g,
+                };
+                return nodes_generated;
+            }
+            generate_sub_nodes(children) {
+    let y_precedent_nodes_values = 0;
+    let x = 160;
+    let sub_nodes_generated = [];
+
+    if (children !== undefined && children.length !== 0) {
+        sub_nodes_generated = [];
+        for (let i = 0; i < children.length; i++) {
+            // Generate a random value between -20 and 20 to add to the x position
+            const randomXOffset = Math.random() * 80 - 20;
+            const randomYOffset = Math.random() * 90 - 20;
+            x = x + 40 + randomXOffset;
+
+            let child_y = this.position_calculator(children.length, i, y_precedent_nodes_values);
+            if (child_y !=0)
+            {
+                child_y=child_y+randomYOffset;
+            }
+            y_precedent_nodes_values = child_y;
+
+            sub_nodes_generated.push({
+                model: { text: children[i].text },
+                view: { x: x+10, y: child_y },
+                subs: this.generate_sub_nodes(children[i].children),
+            });
+        }
+
+        return sub_nodes_generated;
+    }
+}
+            position_calculator(length, index, prevY) {
+    if (length === 1) {
+        return 0;
+    } else if (length === 2) {
+        return index === 0 ? length * this.variation_y : -length * this.variation_y;
+    } else {
+        const middleIndex = Math.floor(length / 2);
+        const distanceFromMiddle = index - middleIndex;
+
+        if (distanceFromMiddle === 0) {
+            return 0;
+        }
+
+        const sign = distanceFromMiddle > 0 ? 1 : -1;
+        const distanceFromMiddleAbs = Math.abs(distanceFromMiddle);
+
+        // Calculating y value based on distance from the middle
+        const yValue = prevY + sign * distanceFromMiddleAbs * this.variation_y;
+
+        return yValue;
+    }
+}
+
+              
+        }
+    //test 
+    let json={
+        "root": {
+          "text": "Mind-Wired",
+          "children": [
+            {
+              "text": "Configuration",
+              "children": [
+                {
+                  "text": "<div style='diplay:flex; borde-radius:12px;width:200px;height:500px;background:#4f0;'>Hi</div>",
+                  "children": [
+                    {
+                      "text": "DEFAULT"
+                    },
+                    {
+                      "text": "X-AXIS"
+                    },
+                    {
+                      "text": "Y-AXIS"
+                    }
+                  ]
+                },
+                {
+                  "text": "Edge",
+                  "children": [
+                    {
+                      "text": "DEFAULT"
+                    },
+                    {
+                      "text": "CURVE"
+                    },
+                    {
+                      "text": "LINE"
+                    }
+                  ]
+                },
+                {
+                  "text": "Node",
+                  "children": [
+                    {
+                      "text": "DEFAULT"
+                    },
+                    {
+                      "text": "RECT"
+                    },
+                    {
+                      "text": "CIRCLE"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "API",
+              "children": [
+                {
+                  "text": "init"
+                },
+                {
+                  "text": "nodes"
+                },
+                {
+                  "text": "edges"
+                },
+                {
+                  "text": "export"
+                },
+                {
+                  "text": "import"
+                }
+              ]
+            },
+            {
+              "text": "UI",
+              "children": [
+                {
+                  "text": "width"
+                },
+                {
+                  "text": "height"
+                },
+                {
+                  "text": "background"
+                },
+                {
+                  "text": "color"
+                },
+                {
+                  "text": "font"
+                }
+              ]
+            }
+          ]
+        }
+        }
+        let mindmap_render=new Mindmap_render("#mindwired",json)
+        mindmap_render.render()
+        /*
+      let mwd; 
+window.onload = () => {
+window.mindwired
+      .init({
+      el: "#mindwired",
+      ui: {width: '100%', height: 500},
+    })
+      .then((instance) => {
+        mwd = instance;
+        // install nodes here
+        mwd.nodes({
+          model: {
+            type: "text",
+            text: "Mind-Wired",
+          },
+          view: {
+            x: 0,
+            y: 0,
+            layout: {type: 'X-AXIS'},
+            edge: {
+              name: 'mustache_lr',
+              color: '#9aabaf',
+              width: 1
+            }
+          },
+          subs: [
+            {
+              model: {text: "Configuration"},
+              view: {x: 160, y: 80}
+            },
+            
+            {
+              model: { text: "Layout" },
+              view: { x: 140, y: -80 },
+              subs: [
+                {
+                  model: { text: "DEFAULT" },
+                  view: { x: 100, y: -40 }
+                },
+                {
+                  model: { text: "X-AXIS" },
+                  view: { x: 100, y: 0 }
+                },
+                {
+                  model: { text: "Y-AXIS" },
+                  view: { x: 100, y: 40 }
+                },
+              ],
+            },
+          ],
+        });
+      });
+}
+
+
+/* START: out of box code 
+const el = document.querySelector('.ctrl');
+el.addEventListener('click', (e) => {
+  const {cmd} = e.target.dataset
+  if(cmd === 'export') {
+    mwd.export().then(json => {
+      const dimmer = document.querySelector('.dimmer');
+      dimmer.style.display = ''
+      dimmer.querySelector('textarea').value = json;
+    })
+  }
+})
+const btnClose = document.querySelector('[data-cmd="close"]');
+btnClose.addEventListener('click', () => {
+  document.querySelector('.dimmer').style.display = 'none'  
+})*/
+function position_calculator(l,i,old)
+{
+    if(l==1)
+    {
+        return 0
+    }
+    else if( l%2==0)
+    {
+      if(i==l/2)
+      {
+        return 0
+      }
+      else{
+           if(old==0)
+           {
+            return l*100
+           }
+           else{
+            return old-100
+           }
+      }
+    }
+    else{
+        if(old==0)
+           {
+            return l*100
+           }
+           else{
+            return old-100
+           }
+    }
+}
+    </script>
+</html>

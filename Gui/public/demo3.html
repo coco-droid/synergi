@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <script src="https://cdn.jsdelivr.net/gh/jerosoler/Drawflow/dist/drawflow.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jerosoler/Drawflow@0.0.48/dist/drawflow.min.css">
+    </head>
+    <body>
+        <div id="drawflow" style="width: 100%; height: 100vh;"></div>
+        <div id="options-bar" style="position: absolute; top: 0; right: 0; width: 200px; height: 100vh; background-color: #f1f1f1; border-left: 1px solid #ccc; padding: 10px; overflow-y: auto;">
+        </div>
+    </body>
+    <script>
+        class WorkflowEditor {
+  constructor(dataflow, customNodes) {
+    this.dataflow = dataflow;
+    this.customNodes = customNodes;
+    this.temporary;
+    this.initEditor();
+  }
+
+  initEditor() {
+    // Créer l'éditeur Drawflow
+    const editor = new Drawflow(document.getElementById("drawflow"));
+    editor.reroute = true;
+    editor.start();
+    editor.import(this.dataflow);
+
+    // Créer la barre d'options pour les nœuds personnalisés
+    const optionsBar = document.getElementById("options-bar");
+    this.customNodes.component.forEach((node) => {
+      const nodeElement = document.createElement("div");
+      nodeElement.classList.add("drag-drawflow");
+      nodeElement.setAttribute("draggable", "true");
+      nodeElement.setAttribute("data-node", node.name);
+      nodeElement.innerHTML = node.html;
+      optionsBar.appendChild(nodeElement);
+    });
+
+    // Écouteurs d'événements pour le glisser-déposer
+    const elements = document.getElementsByClassName("drag-drawflow");
+    for (const element of elements) {
+      element.addEventListener("dragstart", (event) => {
+        event.dataTransfer.setData("node", event.target.getAttribute("data-node"));
+        this.temporary=event.target.getAttribute("data-node");
+      });
+    }
+
+    // Gérer l'événement de dépose dans l'éditeur
+    editor.precanvas.addEventListener("drop", (event) => {
+      event.preventDefault();
+      //const data = event.dataTransfer.getData("node");
+      const data = this.temporary;
+      const posX = event.clientX;
+      const posY = event.clientY;
+      console.log('data'+data);
+      //get index in customNodes have object with the same name 
+      const index = this.customNodes.component.findIndex((node) => node.name === data);
+      console.log(index)
+      console.log(this.customNodes)
+      this.addNodeToEditor(data, posX, posY,editor,this.customNodes.component[index].input,this.customNodes.component[index].output,this.customNodes.component[index].params,this.customNodes.component[index].html);
+    });
+
+    editor.precanvas.addEventListener("dragover", (event) => {
+      event.preventDefault();
+    });
+  }
+
+  addNodeToEditor(nodeName, posX, posY, editor,input,output,params,html) {
+    // 
+      editor.addNode(
+        nodeName,
+        input,
+        output,
+        posX,
+        posY,
+        name,
+        params,
+        html
+      );
+
+
+}
+}
+
+// Exemple de nœuds personnalisés
+const customNodes = {
+  component: [
+    {
+      name: "facebook",
+      html: "<i class='fab fa-facebook'></i><span> Facebook</span>",
+      input: 0,
+      output: 1,
+      params: {
+        url: "",
+      }
+    }
+    // Ajoutez d'autres nœuds personnalisés ici
+  ],
+};
+
+// Exemple de données de flux de travail
+const dataflow= {"drawflow":{"Home":{"data":{"1":{"id":1,"name":"welcome","data":{},"class":"welcome","html":"\n    <div>\n      <div class=\"title-box\">👏 Welcome!!</div>\n      <div class=\"box\">\n        <p>Simple flow library <b>demo</b>\n        <a href=\"https://github.com/jerosoler/Drawflow\" target=\"_blank\">Drawflow</a> by <b>Jero Soler</b></p><br>\n\n        <p>Multiple input / outputs<br>\n           Data sync nodes<br>\n           Import / export<br>\n           Modules support<br>\n           Simple use<br>\n           Type: Fixed or Edit<br>\n           Events: view console<br>\n           Pure Javascript<br>\n        </p>\n        <br>\n        <p><b><u>Shortkeys:</u></b></p>\n        <p>🎹 <b>Delete</b> for remove selected<br>\n        💠 Mouse Left Click == Move<br>\n        ❌ Mouse Right == Delete Option<br>\n        🔍 Ctrl + Wheel == Zoom<br>\n        📱 Mobile support<br>\n        ...</p>\n      </div>\n    </div>\n    ","typenode": false, "inputs":{},"outputs":{},"pos_x":50,"pos_y":50},"2":{"id":2,"name":"slack","data":{},"class":"slack","html":"\n          <div>\n            <div class=\"title-box\"><i class=\"fab fa-slack\"></i> Slack chat message</div>\n          </div>\n          ","typenode": false, "inputs":{"input_1":{"connections":[{"node":"7","input":"output_1"}]}},"outputs":{},"pos_x":1028,"pos_y":87},"3":{"id":3,"name":"telegram","data":{"channel":"channel_2"},"class":"telegram","html":"\n          <div>\n            <div class=\"title-box\"><i class=\"fab fa-telegram-plane\"></i> Telegram bot</div>\n            <div class=\"box\">\n              <p>Send to telegram</p>\n              <p>select channel</p>\n              <select df-channel>\n                <option value=\"channel_1\">Channel 1</option>\n                <option value=\"channel_2\">Channel 2</option>\n                <option value=\"channel_3\">Channel 3</option>\n                <option value=\"channel_4\">Channel 4</option>\n              </select>\n            </div>\n          </div>\n          ","typenode": false, "inputs":{"input_1":{"connections":[{"node":"7","input":"output_1"}]}},"outputs":{},"pos_x":1032,"pos_y":184},"4":{"id":4,"name":"email","data":{},"class":"email","html":"\n            <div>\n              <div class=\"title-box\"><i class=\"fas fa-at\"></i> Send Email </div>\n            </div>\n            ","typenode": false, "inputs":{"input_1":{"connections":[{"node":"5","input":"output_1"}]}},"outputs":{},"pos_x":1033,"pos_y":439},"5":{"id":5,"name":"template","data":{"template":"Write your template"},"class":"template","html":"\n            <div>\n              <div class=\"title-box\"><i class=\"fas fa-code\"></i> Template</div>\n              <div class=\"box\">\n                Ger Vars\n                <textarea df-template></textarea>\n                Output template with vars\n              </div>\n            </div>\n            ","typenode": false, "inputs":{"input_1":{"connections":[{"node":"6","input":"output_1"}]}},"outputs":{"output_1":{"connections":[{"node":"4","output":"input_1"},{"node":"11","output":"input_1"}]}},"pos_x":607,"pos_y":304},"6":{"id":6,"name":"github","data":{"name":"https://github.com/jerosoler/Drawflow"},"class":"github","html":"\n          <div>\n            <div class=\"title-box\"><i class=\"fab fa-github \"></i> Github Stars</div>\n            <div class=\"box\">\n              <p>Enter repository url</p>\n            <input type=\"text\" df-name>\n            </div>\n          </div>\n          ","typenode": false, "inputs":{},"outputs":{"output_1":{"connections":[{"node":"5","output":"input_1"}]}},"pos_x":341,"pos_y":191},"7":{"id":7,"name":"facebook","data":{},"class":"facebook","html":"\n        <div>\n          <div class=\"title-box\"><i class=\"fab fa-facebook\"></i> Facebook Message</div>\n        </div>\n        ","typenode": false, "inputs":{},"outputs":{"output_1":{"connections":[{"node":"2","output":"input_1"},{"node":"3","output":"input_1"},{"node":"11","output":"input_1"}]}},"pos_x":347,"pos_y":87},"11":{"id":11,"name":"log","data":{},"class":"log","html":"\n            <div>\n              <div class=\"title-box\"><i class=\"fas fa-file-signature\"></i> Save log file </div>\n            </div>\n            ","typenode": false, "inputs":{"input_1":{"connections":[{"node":"5","input":"output_1"},{"node":"7","input":"output_1"}]}},"outputs":{},"pos_x":1031,"pos_y":363}}},"Other":{"data":{"8":{"id":8,"name":"personalized","data":{},"class":"personalized","html":"\n            <div>\n              Personalized\n            </div>\n            ","typenode": false, "inputs":{"input_1":{"connections":[{"node":"12","input":"output_1"},{"node":"12","input":"output_2"},{"node":"12","input":"output_3"},{"node":"12","input":"output_4"}]}},"outputs":{"output_1":{"connections":[{"node":"9","output":"input_1"}]}},"pos_x":764,"pos_y":227},"9":{"id":9,"name":"dbclick","data":{"name":"Hello World!!"},"class":"dbclick","html":"\n            <div>\n            <div class=\"title-box\"><i class=\"fas fa-mouse\"></i> Db Click</div>\n              <div class=\"box dbclickbox\" ondblclick=\"showpopup(event)\">\n                Db Click here\n                <div class=\"modal\" style=\"display:none\">\n                  <div class=\"modal-content\">\n                    <span class=\"close\" onclick=\"closemodal(event)\">&times;</span>\n                    Change your variable {name} !\n                    <input type=\"text\" df-name>\n                  </div>\n\n                </div>\n              </div>\n            </div>\n            ","typenode": false, "inputs":{"input_1":{"connections":[{"node":"8","input":"output_1"}]}},"outputs":{"output_1":{"connections":[{"node":"12","output":"input_2"}]}},"pos_x":209,"pos_y":38},"12":{"id":12,"name":"multiple","data":{},"class":"multiple","html":"\n            <div>\n              <div class=\"box\">\n                Multiple!\n              </div>\n            </div>\n            ","typenode": false, "inputs":{"input_1":{"connections":[]},"input_2":{"connections":[{"node":"9","input":"output_1"}]},"input_3":{"connections":[]}},"outputs":{"output_1":{"connections":[{"node":"8","output":"input_1"}]},"output_2":{"connections":[{"node":"8","output":"input_1"}]},"output_3":{"connections":[{"node":"8","output":"input_1"}]},"output_4":{"connections":[{"node":"8","output":"input_1"}]}},"pos_x":179,"pos_y":272}}}}}
+
+// Initialiser l'éditeur de flux de travail avec les données de flux de travail et les nœuds personnalisés
+const workflowEditor = new WorkflowEditor(dataflow, customNodes);
+
+    </script>
+</html>

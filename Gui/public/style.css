@@ -6,10 +6,28 @@
   --chat-bubble-background: #14181a;
   --chat-bubble-active-background: #171a1b;
   --chat-add-button-background: #212324;
-  --chat-send-button-background: #8147fc;
+  --chat-send-button-background:#01A5CBff;
   --chat-text-color: #a3a3a3;
   --chat-options-svg: #a3a3a3;
 }
+/*#8147fc
+.--light-theme {
+  --chat-background: #FFFFFF; 
+
+--chat-panel-background: #FAFAFA;
+
+--chat-bubble-background: #E8F1FD;
+
+--chat-bubble-active-background: #DBE9F9;
+
+--chat-add-button-background: #01A5CB;
+
+--chat-send-button-background: #7F35E3;
+
+--chat-text-color: #282828;
+
+--chat-options-svg: #7DA3CA;
+}*/
 :root {
   --primary: #ff1e92;
   --secondary: #791eff;
@@ -175,7 +193,7 @@ body {
 #chat .chat__conversation-panel {
   background: var(--chat-panel-background);
   border-radius: 12px;
-  padding: 0 1em;
+  /*padding: 0 1em;*/
   height: 60px;
   margin: 0.5em 0 0;
 }

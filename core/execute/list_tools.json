@@ -1,0 +1,44 @@
+{
+    "console": {
+        "file": "console_tool",
+        "parameters": [
+            {
+                "name": "command",
+                "type": "string",
+                "description": "Allows executing commands in a terminal     Must take into account the target operating system to generate proper command syntax: Windows: bash syntax Linux: bash syntax MacOS: bash syntax  Must resolve application names based on the system  Example: open 'calculator app' for Linux KDE: kcalc for Linux GNOME: gnome-calc for other....  The goal is to enable cross-OS command execution by handling differences in syntax, shells and application names"
+            
+            }
+        ]
+    },
+    "duckduckgo": {
+        "file": "duckduckgo_tool",
+        "parameters": [
+            {
+                "name": "query",
+                "type": "string",
+                "description": "The search query for DuckDuckGo"
+            }
+        ]
+    },
+    "url_content": {
+        "file": "url_content_tool",
+        "parameters": [
+            {
+                "name": "url",
+                "type": "string",
+                "description": "The URL to retrieve content from"
+            }
+        ]
+    },
+    "app_launcher":{
+        "name": "apps_launcher_tool",
+        "description": "Launch applications by searching based on textual description",
+        "parameters": [
+          {
+            "name": "description",
+            "type": "string",
+            "description": "The text description of the application to launch" 
+          }
+        ]
+    }
+}

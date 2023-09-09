@@ -5,41 +5,47 @@
   <title></title>
   <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
 <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Lato'><link rel="stylesheet" href="./style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/reveal.min.css" integrity="sha512-V5fKCVKOFy36w8zJmLzPH5R6zU6KvuHOvxfMRczx2ZeqTjKRGSBO9yiZjCKEJS3n6EmENwrH/xvSwXqxje+VVA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="electron.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/js/reveal.min.js" integrity="sha512-QYXU3Cojl94ZRiZRjUZpyg1odj9mKTON9MsTMzGNx/L3JqvMA3BQNraZwsZ83UeisO+QMVfFa83SyuYYJzR9hw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@floating-ui/core@1.3.1"></script>
 <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.4.5"></script>
 <script src="https://kit.fontawesome.com/58115e4ecb.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/siriwave/dist/siriwave.umd.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/marked/1.2.7/marked.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/1.2.7/marked.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" integrity="sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3q71HotJqlAn" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js" integrity="sha512-rdhY3cbXURo13l/WU9VlaRyaIYeJ/KBakckXIvJNAQde8DgpOmE+eZf7ha4vdqVjTtwQt69bD2wH2LXob/LB7Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- The loading of KaTeX is deferred to speed up page rendering -->
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" integrity="sha384-cpW21h6RZv/phavutF+AuVYrr+dA8xD9zs6FwLpaCct6O9ctzYFfFr4dgmgccOTx" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml-full.min.js" integrity="sha512-PbLRl9V4qEM7j3xggKupLNdcodHT0w+x77S/JoTWxrhPEVZ0NkTPp90bzUeTyFXsBzsaApVOZdCHIzL6o51KiA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://unpkg.com/@popperjs/core@2"></script>
 </head>
+<script src="./render.js"></script>
+
 <body class="dropzone" id="dropzonewidget" >
 <!-- partial:index.partial.html -->
+<div class="head_chat" style="display: flex;
+height: 16px;
+justify-content: center;
+color: #9b9b9b;
+background: rgba(10, 14, 14, 0.95);
+padding: 2px;
+align-items: center;">
+  <div class="" style="height: 5px;
+  width: 63px;
+  background: #9b9b9b;
+  border-radius: 10px;"></div>
+  <!--minimise icon -->
+  <i class="fa-solid fa-minus" onclick="minimizeApp()" style="position:absolute;right:30px;"></i>
+  <!--close-->
+  <i class="fa-solid fa-xmark" onclick="closeApp()" style="position:absolute;right:4px;"></i>
+</div>
 <div class="--dark-theme" id="chat" style="display: none; height:100vh;" >
   <i class="fa-solid fa-clock-rotate-left"></i>
   <div class="chat__conversation-board " >
-      <div class="chat__conversation-board__message-container">
-        <div class="chat__conversation-board__message__context">
-          <div class="chat__conversation-board__message__bubble"> 
-            <span style=" background-color: #9991f698;"><bold>Goal:</bold>Generate Task
-              <!--task-->
-              <div class="task_box">
-                    <span style="background-color:transparent;">Steps</span>
-                    <div class="task_me">
-                       <span style="background-color:transparent;">Task 1</span>
-                       <i class="fa-solid fa-spinner fa-spin"></i>
-                    </div>
-                    <div class="task_me" >
-                      <span style="background-color:transparent;">Task 2</span>
-                      <i class="fa-solid fa-spinner fa-spin"></i>
-                    </div>
-                    <div class="task_me">
-                      <span style="background-color:transparent;">Task 3</span>
-                      <i class="fa-solid fa-spinner fa-spin"></i>
-                    </div>
-            </div>
-            </span>
-          </div>
-        </div>
-      </div>
+    
     </div>
   <div class="chat__conversation-panel" style="background: transparent;">
     <div class="chat__conversation-panel__container" style="display: flex;flex-direction:column; background-color: var(--chat-panel-background); padding:10px;border-radius:12px;">
@@ -56,10 +62,15 @@
     </div>
   </div>
 </div>
-<div class="--dark-theme first" >
+<div class="--dark-theme first" style="display:flex;" >
   <div style="text-align: center; display:flex; flex-direction:column; justify-content:center; align-items: center;">
     <span></span><img style="width: 150px; height:150px;" src="preview.png"/></span>
-    <span style="text-align: center; color:#fff;">Synergi</span>
+    <span style='font-size: 20px;
+    font-family: "Roboto", sans-serif;
+    color: #ffffff;
+    font-weight: bold;
+    line-height: 1.5;
+    text-align: center;'>Synergi</span>
   </div>
 <div class="bubble_box ">
  <div class="bubble__context ">
@@ -89,6 +100,184 @@
 <audio id="audio2"src="./talk2.mp3"></audio>
 <button class="btn">Start</button>
 </div>
+<!--chat history container-->
+<div class="--dark-theme third" style="display: none; flex-direction: column; text-align: center;">
+    <span style="margin-bottom:20px;">Chat history</span>
+    <!--search on the history-->
+    <div class="search_history" style="display: flex; flex-direction: row; justify-content: center; align-items: center; margin-bottom:35px;">
+      <form class="form">
+        <label for="search">
+            <input required="" autocomplete="off" placeholder="search your chats" id="search" type="text" >
+            <div class="icon">
+                <svg stroke-width="2" stroke="currentColor" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="swap-on">
+                    <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linejoin="round" stroke-linecap="round"></path>
+                </svg>
+                <svg stroke-width="2" stroke="currentColor" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="swap-off">
+                    <path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linejoin="round" stroke-linecap="round"></path>
+                </svg>
+            </div>
+            <button type="reset" class="close-btn">
+                <svg viewBox="0 0 20 20" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg">
+                    <path clip-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" fill-rule="evenodd"></path>
+                </svg>
+            </button>
+        </label>
+    </form>
+    </div>
+    <div class="the_history" style="display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 7px;">
+      <div class="a_history" style="display: flex;
+      border-radius: 12px;
+      background: burlywood;
+      padding: 9px;
+      text-align: left;">
+      <div style="display:flex;flex-direction: column;align-items: flex-start;">
+          <span class="summary_conversation">
+            The Third Republic was the republican government of France that succeeded the Second Empire of Napoleon III from 1870 until 1940
+          </span>
+          <span class="date_conversation">
+            2020-12-12
+          </span>
+      </div>
+      <i class="fa-solid fa-trash"></i>
+      </div>
+    </div>
+</div>
+<style>
+  /* From uiverse.io by @satyamchaudharydev */
+/* this button is inspired by -- whatsapp input */
+/* == type to see fully interactive and click the close buttom to remove the text  == */
+.third 
+  {
+    background: var(--chat-background);
+    box-sizing: border-box;
+    padding: 1em;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+ 
+.form {
+  --input-bg: #FFf;
+ /*  background of input */
+  --padding: 1.5em;
+  --rotate: 80deg;
+ /*  rotation degree of input*/
+  --gap: 2em;
+  /*  gap of items in input */
+  --icon-change-color: #15A986;
+ /*  when rotating changed icon color */
+  --height: 40px;
+ /*  height */
+  width: 200px;
+  padding-inline-end: 1em;
+ /*  change this for padding in the end of input */
+  background: var(--input-bg);
+  position: relative;
+  border-radius: 4px;
+}
+
+.form label {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: var(--height);
+}
+
+.form input {
+  width: 100%;
+  padding-inline-start: calc(var(--padding) + var(--gap));
+  outline: none;
+  background: none;
+  border: 0;
+}
+/* style for both icons -- search,close */
+.form svg {
+  /* display: block; */
+  color: #111;
+  transition: 0.3s cubic-bezier(.4,0,.2,1);
+  position: absolute;
+  height: 15px;
+}
+/* search icon */
+.icon {
+  position: absolute;
+  left: var(--padding);
+  transition: 0.3s cubic-bezier(.4,0,.2,1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* arrow-icon*/
+.swap-off {
+  transform: rotate(-80deg);
+  opacity: 0;
+  visibility: hidden;
+}
+/* close button */
+.close-btn {
+  /* removing default bg of button */
+  background: none;
+  border: none;
+  right: calc(var(--padding) - var(--gap));
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #111;
+  padding: 0.1em;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  transition: 0.3s;
+  opacity: 0;
+  transform: scale(0);
+  visibility: hidden;
+}
+
+.form input:focus ~ .icon {
+  transform: rotate(var(--rotate)) scale(1.3);
+}
+
+.form input:focus ~ .icon .swap-off {
+  opacity: 1;
+  transform: rotate(-80deg);
+  visibility: visible;
+  color: var(--icon-change-color);
+}
+
+.form input:focus ~ .icon .swap-on {
+  opacity: 0;
+  visibility: visible;
+}
+
+.form input:valid ~ .icon {
+  transform: scale(1.3) rotate(var(--rotate))
+}
+
+.form input:valid ~ .icon .swap-off {
+  opacity: 1;
+  visibility: visible;
+  color: var(--icon-change-color);
+}
+
+.form input:valid ~ .icon .swap-on {
+  opacity: 0;
+  visibility: visible;
+}
+
+.form input:valid ~ .close-btn {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+  transition: 0s;
+}
+</style>
 <!-- <button class="chat__conversation-panel__button panel-item btn-icon add-file-button">
         <svg class="feather feather-plus sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -111,332 +300,51 @@
         </svg>
       </button>-->
 <!-- partial -->
+<script src="./og.js"></script>
   <script  src="./script.js"></script>
-<script>
-let filepreview ,filebol;
-let file_preview=document.querySelector('.file_preview');
-  // Client side 
-const socket = io('http://localhost:5000');
-
-socket.on('connect', () => {
-  console.log('Connected to server');
-});
-// Listen for event
-socket.on('message', (data) => {
-  displayMessage(data,'bot');
-});
-socket.on('task',(data)=>{
-  displayMessage(data,'task');
-})
-socket.on('task_update',(data)=>{
-  console.log(data);
-  document.getElementById(data.id).innerHTML=data.title;
-})
-
-
-//function send message
-function sendMessage() {
-  //get message from input
-  const message = document.querySelector('.message-input').value;
-  //check if message is empty
-  if (!message) return;
-  //display message in the chat
-  displayMessage({message: message}, 'user');
-  //emit message to server
-  socket.emit('message', {sendMessage: message});
-
-  //clear input
-  document.querySelector('.chat__conversation-panel__input').value = '';
-}
-//function display message
-function displayMessage(data, type) {
-  if(type=="bot"){
-  //display message in the chat
-   document.querySelector('.chat__conversation-board').innerHTML += `
-   <div class="chat__conversation-board__message-container">
-          <div class="chat__conversation-board__message__context">
-            <div class="chat__conversation-board__message__bubble"> <span style=" background-color: #9991f698;">${data.message}</span></div>
-          </div>
-          <div class="chat__conversation-board__message__options">
-            <button class="btn-icon chat__conversation-board__message__option-button option-item emoji-button">
-              <svg class="feather feather-smile sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <circle cx="12" cy="12" r="10"></circle>
-                <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
-                <line x1="9" y1="9" x2="9.01" y2="9"></line>
-                <line x1="15" y1="9" x2="15.01" y2="9"></line>
-              </svg>
-            </button>
-            <button class="btn-icon chat__conversation-board__message__option-button option-item more-button">
-              <svg class="feather feather-more-horizontal sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <circle cx="12" cy="12" r="1"></circle>
-                <circle cx="19" cy="12" r="1"></circle>
-                <circle cx="5" cy="12" r="1"></circle>
-              </svg>
-            </button>
-          </div>
-        </div>`
-      }
-      else if (type=="user" && filebol==true)
-      {
-        file_preview.style.display='none';
-        document.querySelector('.chat__conversation-board').innerHTML +=`
-        <div class="chat__conversation-board__message-container reversed">
-          <div class="chat__conversation-board__message__context">
-            <div class="chat__conversation-board__message__bubble"> <span style="background-color:#f52cf580;">
-              <div style="display:flex; padding:5px;" class='preview-chat'>
-                   ${filepreview}
-              </div>
-              ${data.message}</span></div>
-          </div>
-          <div class="chat__conversation-board__message__options">
-            <button class="btn-icon chat__conversation-board__message__option-button option-item emoji-button">
-              <svg class="feather feather-smile sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <circle cx="12" cy="12" r="10"></circle>
-                <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
-                <line x1="9" y1="9" x2="9.01" y2="9"></line>
-                <line x1="15" y1="9" x2="15.01" y2="9"></line>
-              </svg>
-            </button>
-            <button class="btn-icon chat__conversation-board__message__option-button option-item more-button">
-              <svg class="feather feather-more-horizontal sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <circle cx="12" cy="12" r="1"></circle>
-                <circle cx="19" cy="12" r="1"></circle>
-                <circle cx="5" cy="12" r="1"></circle>
-              </svg>
-            </button>
-          </div>
-        </div>
-        `
-      }
-      else if (type=="task"){
-        /* data.tasks:
-       {
-        Goal:"",
-        tasks:
-        [
-          {
-            id:"",
-            title:""
-          },
-          ...
-        ]
-        }
-        */
-       let tasks_html='';
-       for(var i=0; i<=data.tasks; i++)
-       {
-         tasks_html+=`
-         <div class="task_me">
-           <span style="background-color:transparent; id="${data.tasks[i].id}">${data.tasks[i].title}</span>
-           <i class="fa-solid fa-spinner fa-spin"></i>
-          </div>
-         `;
-       }
-       document.querySelector('.chat__conversation-board').innerHTML=`
-       <div class="chat__conversation-board__message-container">
-        <div class="chat__conversation-board__message__context">
-          <div class="chat__conversation-board__message__bubble"> 
-            <span style=" background-color: #9991f698;"><bold>Goal:</bold>${data.Goal}
-              <!--task-->
-              <div class="task_box">
-                 ${tasks_html}
-            </div>
-            </span>
-          </div>
-        </div>
-      </div>
-       `;
-      }
-      else{
-        document.querySelector('.chat__conversation-board').innerHTML += ` <div class="chat__conversation-board__message-container reversed">
-          <div class="chat__conversation-board__message__context">
-            <div class="chat__conversation-board__message__bubble"> <span style="background-color:#f52cf580;">${data.message}</span></div>
-          </div>
-          <div class="chat__conversation-board__message__options">
-            <button class="btn-icon chat__conversation-board__message__option-button option-item emoji-button">
-              <svg class="feather feather-smile sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <circle cx="12" cy="12" r="10"></circle>
-                <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
-                <line x1="9" y1="9" x2="9.01" y2="9"></line>
-                <line x1="15" y1="9" x2="15.01" y2="9"></line>
-              </svg>
-            </button>
-            <button class="btn-icon chat__conversation-board__message__option-button option-item more-button">
-              <svg class="feather feather-more-horizontal sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <circle cx="12" cy="12" r="1"></circle>
-                <circle cx="19" cy="12" r="1"></circle>
-                <circle cx="5" cy="12" r="1"></circle>
-              </svg>
-            </button>
-          </div>
-        </div>`
-      }
-      //auto scroll
-      var chat_board=document.querySelector('.chat__conversation-board');
-      chat_board.scrollTop=chat_board.scrollHeight;
-}
-//listen for click on send message button
-document.querySelector('.send-message-button').addEventListener('click', sendMessage);
-document.querySelector('.btn').addEventListener('click', function(){
-  document.querySelector('.first').style.display = "none";
-  document.querySelector('#chat').style.display = "block";
-}
-
-);
-document.querySelector('.fa-clock-rotate-left').onclick=function(){
-socket.emit('get_history',{});}
-  socket.on('history',(data)=>{
-    console.log(data);
-
-  });
-// dropzone 
-const supportsFileSystemAccessAPI =
-  "getAsFileSystemHandle" in DataTransferItem.prototype;
-const supportsWebkitGetAsEntry =
-  "webkitGetAsEntry" in DataTransferItem.prototype;
-
-const elem = document.querySelector("#chat");
-//const debug = document.querySelector("body");
-
-elem.addEventListener("dragover", (e) => {
-  // Prevent navigation.
-  e.preventDefault();
-});
-
-elem.addEventListener("dragenter", (e) => {
-  elem.style.outline = "solid red 1px";
-});
-
-elem.addEventListener("dragleave", (e) => {
-  elem.style.outline = "";
-});
-
-elem.addEventListener("drop", async (e) => {
-  e.preventDefault();
-  elem.style.outline = "";
-  const fileHandlesPromises = [...e.dataTransfer.items]
-    .filter((item) => item.kind === "file")
-    .map((item) =>
-      supportsFileSystemAccessAPI
-        ? item.getAsFileSystemHandle()
-        : supportsWebkitGetAsEntry
-        ? item.webkitGetAsEntry()
-        : item.getAsFile()
-    );
-
-  for await (const handle of fileHandlesPromises) {
-    if (handle.kind === "directory" || handle.isDirectory) {
-      console.log(`Directory: ${handle.name}`);
-      //debug.textContent += `Directory: ${handle.name}\n`;
-    } else {
-      filebol=true;
-      console.log(`File: lol ${handle.name}`);
-      //file preview in tippy tooltip on top of the chat conversational board
-      const file = await handle.getFile();
-      const reader = new FileReader();
-      function typeFile(ext){
-        //detect if .txt:txt.png,.doc:doc.png,.pdf:pdf.png, or it other use file.png
-        if(ext[1]=="txt"){
-          return "txt.png";
-        }
-        else if(ext[1]=="doc"){
-          return "doc.png";
-        }
-        else if(ext[1]=="pdf"){
-          return "pdf.png";
-        }
-        else{
-          return "file.png";
-        }
-      }
-      filepreview=`
-                 <div class="file_ext" style="display:flex;align-items:center;justify-content:center;padding:1px;">
-                    <img src="${typeFile(file.name.split('.'))}" style="height:100%;"/>
-                  </div>
-                  <div class="file_name">
-                    <span style="background:transparent;margin:0;">${file.name}</span>
-                    <span style="background:transparent;font-size:0.7rem;margin:0;">${file.size}</span>
-                  </div>
-                  <span style="height:100%;color:#ffffff4f;align-items:center;display:flex;background:transparent;">
-                    <i class="fa-solid fa-xmark" "></i>
-                  </span>
-      `;
-      //display file preview like a floating tooltip on top of the chat conversational board
-        var chat_board=document.querySelector('.chat__conversation-panel');
-        file_preview.innerHTML=filepreview;
-        //get chat board height
-        var chat_board_height=chat_board.offsetHeight;
-        //position the file preview tooltip
-        //file_preview.style.top=chat_board.offsetTop-chat_board_height-10+"px";
-        file_preview.style.height=50+"px";
-        //file_preview.style.left=chat_board.offsetLeft+9+"px";
-        //file_preview.style.position="absolute";
-        //z-index
-       // file_preview.style.zIndex="1000";
-        //display file preview  
-        file_preview.style.display="flex";
-        document.querySelector('#close').addEventListener('click',()=>{
-          file_preview.style.display='none';
-          filepreview='';
-        })
-                }
-  }
-});
-/*animation to sync bubble text box with sound */
-var waveContainer = document.querySelector(".wave-container");
-var wave = new SiriWave({
-  container: waveContainer,
-  width: 200,
-  height: 100,
-  style: "ios",
-  amplitude: 0.5,
-  frequency: 6,
-  color: "#fff",
-});
-  function animateBubble(element,element2, audio,callback) {
-    let text = element.textContent;
-  element.textContent = "";
-  element2.style.display="block";
-  let index = 0;
-  let duration = audio.duration * 1000; // Convert audio duration to milliseconds
-
-  // Calculate the delay between displaying each character based on audio duration
-  let charDelay = duration / text.length;
-  audio.play()
-  element.style.opacity = 1;
-  wave.start();
-  function typeWriter() {
-    if (index < text.length) { 
-      element.textContent += text.charAt(index);
-      index++;
-      setTimeout(typeWriter, charDelay);
-      //detect when the audio finish
-    } else {
-      // Show wave animation and sync with audio
-      element.style.opacity = 1;
-      wave.start();
-    }
-  }
- typeWriter();
- audio.addEventListener('ended',()=>{
-        //element.style.opacity = 0;
-        callback();
-      })
-}
-// Call the animateBubble function for each bubble box
-let bubble1 = document.querySelector(".bubble1");
-document.querySelector("#dropzonewidget > div.--dark-theme.first > div:nth-child(1) > img").onclick=function(){
-  let audio1 = document.getElementById("audio1");
-animateBubble(bubble1,document.querySelectorAll('.bubble_box')[0],audio1,()=>{
-  var bubble2 = document.querySelector(".bubble2");
-var audio2 = document.getElementById("audio2");
-animateBubble(bubble2,document.querySelectorAll('.bubble_box')[1],audio2,()=>{
-  console.log('finish!')
-});
-});}
-</script>
-
 <style>
+  .popper__tip {
+
+position: absolute; 
+width: 300px;
+background: linear-gradient(to bottom, #7F35E3, #123D7B); /* dégradé avec vos couleurs */
+border: 1px solid #D525C1; /* steel pink */
+border-radius: 6px; /* coins arrondis */
+padding: 15px;
+box-shadow: 0 5px 15px rgba(127, 53, 227, 0.15); /* ombre portée avec blue violet */
+z-index: 9999;
+}
+
+.popper__image {
+width: 100%;
+max-height: 200px; 
+border-radius: 6px; /* coins arrondis */
+object-fit: cover;
+margin-bottom: 15px;
+}
+
+.popper__title {
+font-family: 'Roboto', sans-serif;
+font-size: 18px;
+font-weight: bold;
+color: #7DA3CA; /* air superiority blue */
+margin-bottom: 10px;
+}
+
+.popper__description {
+font-family: 'Open Sans', sans-serif;
+font-size: 14px; 
+color: #fff; /* blanc pour contraste */
+margin-bottom: 0;
+}
+  .poppertip {
+  /* ... */
+  display: none;
+}
+
+.poppertip[data-show] {
+  display: block;
+}
   .bubble_box
   {
     display:none;
