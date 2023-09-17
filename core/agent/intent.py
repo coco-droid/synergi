@@ -74,14 +74,14 @@ YOU MUST BE RETURN A JSON LIKE THIS:
 '''
         #format
         master_prompt = master_prompt.format(date=date, time=time, username="Robert", summary=summary, recent_messages=recent_messages, json_samples=json_samples)
-        model = Model("gpt3", master_prompt=master_prompt, api_key="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")
+        model = Model("gpt4-clarifai", master_prompt=master_prompt, api_key="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")
         user_message =username+"say:"+message+"\nsynerige_json_response:"
         response = model.generate_text(user_message)
         print(response)
         data = extract_json(response)
 
         if "lauch_app" in data and data["lauch_app"] != None and data["lauch_app"] != "":
-            apps_launcher_tool(data["lauch_app"])
+            #apps_launcher_tool(data["lauch_app"])
             pass
                 #self.episodic_memory.save(element, key) 
 

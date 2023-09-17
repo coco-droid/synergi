@@ -38,6 +38,6 @@
 
 
 #je veux acceder a la fonction lauch du script python ce trouvant dans /execute/tools/apps_launcher.py
-from execute.tools.apps_launcher import lauch
-
-lauch('the calculator')
+from params.config import APIKeyManager
+jk=APIKeyManager().get_api_key("clarifai_PAT")
+print(jk)

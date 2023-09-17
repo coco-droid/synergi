@@ -1,10 +1,10 @@
 import requests
 import json
-
+from params.config import APIKeyManager
 class Jurassic:
 
   def __init__(self, api_key):
-    self.api_key = 'WNkk4s5D1PWdHIZwyjcNkipnf2nEnDSF'
+    self.api_key =APIKeyManager().get_api_key('jurassic_key')
     self.base_url = "https://api.ai21.com/studio/v1/"
 
   def generate(self, prompt, model="j2-ultra"):

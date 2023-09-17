@@ -1,7 +1,7 @@
 from clarifai_grpc.channel.clarifai_channel import ClarifaiChannel
 from clarifai_grpc.grpc.api import resources_pb2, service_pb2, service_pb2_grpc
 from clarifai_grpc.grpc.api.status import status_code_pb2
-
+from params.config import APIKeyManager
 class ClarifaiAPI:
     def __init__(self,model_name):
         #condition to detect the name of the model 
@@ -52,7 +52,8 @@ class ClarifaiAPI:
             self.MODEL_VERSION_ID = '71cb98f572694e28a99fa8fa86aaa825'
         else:
             raise ValueError(f"Invalid model name: {model_name}")
-        self.PAT = 'f241078d1c8d404498b31cfe62f1df70'
+        self.PAT =APIKeyManager().get_api_key('clarifai_PAT')
+        
         self.channel = ClarifaiChannel.get_grpc_channel()
         self.stub = service_pb2_grpc.V2Stub(self.channel)
         self.metadata = (('authorization', 'Key ' + self.PAT),)

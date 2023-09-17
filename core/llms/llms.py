@@ -1,12 +1,14 @@
 import os
 import openai
+from params.config import APIKeyManager
 from llms.jurassic import Jurassic
 from langchain.chat_models import ChatAnthropic, ChatOpenAI
 from langchain.schema import AIMessage, HumanMessage  
 from langchain.prompts import ChatPromptTemplate, SystemMessagePromptTemplate
 from  llms.clarifai_pipeline import ClarifaiAPI
 import requests
-openai.api_key = "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"
+
+openai.api_key = APIKeyManager().get_api_key('openai_key')
 
 class Model:
 
@@ -100,7 +102,8 @@ class Model:
     return clarifai_response
   def  generate_text_with_GIT(self,image):
        API_URL = "https://api-inference.huggingface.co/models/microsoft/git-base"
-       headers = {"Authorization": "Bearer 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"}
+       headers = {"Authorization": "Bearer"+APIKeyManager().get_api_key('hugging_face')}
+       #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"}
        with open(filename, "rb") as f:
           data = f.read()
        response = requests.post(API_URL, headers=headers, data=data)

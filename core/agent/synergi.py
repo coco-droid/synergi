@@ -23,7 +23,7 @@ class SynergiAgent:
 
       # Actions synchrones simples 
       if "action" in data and data["action"] != None and data["action"] != "":
-        self.execute_action.execute({'title':'A simple action','description':data["action"],'method':'sync'})
+        #self.execute_action.execute({'title':'A simple action','description':data["action"],'method':'sync'})
         pass # Add a placeholder statement here
 
       # Récupérer mémoire épisodique

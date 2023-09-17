@@ -1,11 +1,13 @@
 from typing import Optional
 from elevenlabs import generate, play, set_api_key
 from TTS.default import low_level_stt
+from params.config import APIKeyManager
 class Speech:
     def __init__(self, text: str, provider: Optional[str] = "elevenlabs"):
         self.text = text
         self.provider = provider
-        self.api_key = "ea7d57422f947e32f7f3faac717defcf"
+        self.api_key =APIKeyManager().get_api_key('elevenlabs')
+        
 
     def set_api_key(self, api_key: str):
         self.api_key = api_key

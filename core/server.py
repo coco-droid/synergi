@@ -5,12 +5,13 @@ from agent.contextual import ContextConversation
 from others.og import OpenGraphScraper
 from werkzeug.utils import secure_filename
 import json
+import eventlet 
 import os
 #launch redis-server  in another console
 
 print("redis is launch")
 app = Flask(__name__)
-socketio = SocketIO(app)
+socketio = SocketIO(app, async_mode='eventlet') 
 synergi = SynergiAgent()
 
 @socketio.on('connect')
