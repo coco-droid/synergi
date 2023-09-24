@@ -78,7 +78,7 @@ class ContextConversation:
                 elif item["emettor"] == "bot":
                     context += f"Old Synergi Output key value: {item['message']}\n"
 
-            summarizer = Model("jurassic", master_prompt=SUMMARIZE_PROMPT, api_key="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")
+            summarizer = Model("jurassic", master_prompt=SUMMARIZE_PROMPT, api_key="")
             summary = summarizer.generate_text(context)
 
             self.long_summary = summary

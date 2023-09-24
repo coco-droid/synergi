@@ -2,9 +2,9 @@ let filepreview ,filebol,fileData,fileName;
 let file_preview=document.querySelector('.file_preview');
   // Client side 
 // Listen for event
-socket.on('message', (data) => {
+/*socket.on('message', (data) => {
   displayMessage(data,'bot');
-});
+});*/
 socket.on('task',(data)=>{
   displayMessage(data,'task');
 })
@@ -60,12 +60,17 @@ function sendMessage() {
   if(filebol==true)
   {
     displayMessage({message: message}, 'user');
-    socket.emit('with_file', {sendMessage: message,file:fileData,name:fileName});
-
+    //socket.emit('with_file', {sendMessage: message,file:fileData,name:fileName});
+    fetchOnserver('http://localhost:5000/message',{sendMessage: message,file:fileData,name:fileName,haveFile:true},function(res){
+      displayMessage({message:res.msg},'bot');
+    })
   }
   else{
     displayMessage({message: message}, 'user');
-  socket.emit('message', {sendMessage: message});
+  //socket.emit('message', {sendMessage: message});
+  fetchOnserver('http://localhost:5000/message',{sendMessage: message,file:fileData,name:fileName,haveFile:false},function(res){
+      displayMessage({message:res.msg},'bot');
+    })
   }
   //clear input
   document.querySelector('.message-input').value = '';
@@ -478,4 +483,32 @@ function scrollonconversation(text)
     }
   }
 
+}
+function fetchOnserver(url,data,callback)
+{
+  // Créer un objet XMLHttpRequest
+var xhr = new XMLHttpRequest();
+// Configuration de la requête POST
+xhr.open("POST",url, true);
+// Configuration du timeout personnalisé (en millisecondes)
+xhr.timeout = 150000000; // Timeout de 15 secondes
+// Définir le gestionnaire d'événement pour la réponse
+xhr.onreadystatechange = function () {
+if (xhr.readyState === 4) { // La requête est terminée
+if (xhr.status === 200) { // Le serveur a répondu avec succès
+  var response = xhr.responseText;
+   callback(JSON.parse(response))
+} else {
+console.error("Erreur de requête. Statut :", xhr.status);
+}
+}
+};
+// Gérer les erreurs de timeout
+xhr.ontimeout = function () {
+console.error("La requête a expiré en raison d'un timeout.");
+};
+// Configurer les en-têtes de la requête (si nécessaire)
+xhr.setRequestHeader("Content-Type", "application/json");
+// Envoyer la requête avec les données
+xhr.send(JSON.stringify(data));
 }

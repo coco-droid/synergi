@@ -6,14 +6,14 @@ let appTray = null;
 let mainWindow = null;
 const currentDir = __dirname;
 const serverPath = path.join(currentDir, '../core/server.py');
-fs.chmodSync(serverPath, 0o755);
-const backendProcess = childProcess.spawn('python3', [serverPath]);
+//fs.chmodSync(serverPath, 0o755);
+//const backendProcess = childProcess.spawn('python3', [serverPath]);
 const appIconPath = path.join(__dirname, 'public/preview.png');
 
 function createWindow() {
-    backendProcess.stdout.on('data', data => {
+  /*  backendProcess.stdout.on('data', data => {
         console.log(data.toString());
-    });
+    });*/
     const primaryDisplay = screen.getPrimaryDisplay();
     
     // Create the browser window.
@@ -158,7 +158,7 @@ function sendToSynergy() {
 }
 
 app.on('window-all-closed', () => {
-    backendProcess.kill();
+   // backendProcess.kill();
     if (process.platform !== 'darwin') {
         app.quit();
     }

@@ -16,7 +16,7 @@ class IntentAnalyzer:
 
         #self.episodic_memory = EpisodicMemory('synergi_index') 
         self.context = ContextConversation()
-        self.key_predictor = Model("gpt3", prompt=PROMPT_PREDICT_KEYS, api_key="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")
+        self.key_predictor = Model("gpt3", prompt=PROMPT_PREDICT_KEYS, api_key="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")
 
     def predict(self, message):
         def extract_json(text):
@@ -74,14 +74,14 @@ YOU MUST BE RETURN A JSON LIKE THIS:
 '''
         #format
         master_prompt = master_prompt.format(date=date, time=time, username="Robert", summary=summary, recent_messages=recent_messages, json_samples=json_samples)
-        model = Model("gpt4-clarifai", master_prompt=master_prompt, api_key="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")
+        model = Model("gpt3", master_prompt=master_prompt, api_key="")
         user_message =username+"say:"+message+"\nsynerige_json_response:"
         response = model.generate_text(user_message)
         print(response)
         data = extract_json(response)
 
         if "lauch_app" in data and data["lauch_app"] != None and data["lauch_app"] != "":
-            #apps_launcher_tool(data["lauch_app"])
+            apps_launcher_tool(data["lauch_app"])
             pass
                 #self.episodic_memory.save(element, key) 
 

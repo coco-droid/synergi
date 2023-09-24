@@ -9,7 +9,7 @@ from  llms.clarifai_pipeline import ClarifaiAPI
 import requests
 
 openai.api_key = APIKeyManager().get_api_key('openai_key')
-
+print(openai.api_key)
 class Model:
 
   MODELS = {
@@ -65,6 +65,8 @@ class Model:
       elif self.model_name.lower() in ['gpt3', 'gpt4']:
         print("gpt3")
         print(self.master_prompt)
+        print(openai.api_key)
+        openai.api_key=APIKeyManager().get_api_key('openai_key')
         response = openai.ChatCompletion.create(
           model="gpt-3.5-turbo-16k",
           messages=[
@@ -97,9 +99,19 @@ class Model:
     clarifai_response = clarifai.predict_video(video_url)
     return clarifai_response
   def generate_image_with_text(self,text):
-    clarifai = ClarifaiAPI('stable-diffusion-xl-beta')
-    clarifai_response = clarifai.generate_image(text)
+    clarifai = ClarifaiAPI('stable-diffusion-xl')
+    clarifai_response = clarifai.generate_image_with_text(text)
     return clarifai_response
+  def generate_dalle(self,text):
+      response = openai.Image.create(
+          prompt=text,
+          n=1,
+          size="1024x1024")
+      return  response['data'][0]['url']
+  def generate_image_dalle(self,text):
+      clarifai = ClarifaiAPI('dalle')
+      clarifai_response = clarifai.generate_image_with_text(text)
+      return clarifai_response
   def  generate_text_with_GIT(self,image):
        API_URL = "https://api-inference.huggingface.co/models/microsoft/git-base"
        headers = {"Authorization": "Bearer"+APIKeyManager().get_api_key('hugging_face')}

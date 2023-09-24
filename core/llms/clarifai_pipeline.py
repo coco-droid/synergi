@@ -20,6 +20,11 @@ class ClarifaiAPI:
              self.APP_ID = 'completion'
              self.MODEL_ID = 'claude-v2'
              self.MODEL_VERSION_ID = 'cd8f314bf81f4c24b006af002e827122'
+        elif model_name.lower()=='dalle':
+            self.USER_ID = 'openai'
+            self.APP_ID = 'dall-e'
+            self.MODEL_ID = 'DALL-E'
+            self.MODEL_VERSION_ID = 'f1756115761940bd820e61383de79351'
         elif model_name.lower()=='claudev1.2':
             self.USER_ID = 'anthropic'
             self.APP_ID = 'completion'
@@ -232,8 +237,8 @@ class ClarifaiAPI:
             print(post_model_outputs_response.status)
             raise Exception("Post model outputs failed, status: " + post_model_outputs_response.status.description)
 
-        output = post_model_outputs_response.outputs[0]
-        print(output)
+        output = post_model_outputs_response.outputs[0].data.image.base64
+        info= post_model_outputs_response.outputs[0].data.image.image_info.format
         return output
     def generate_text_embedding(self,raw):
         post_model_outputs_response = self.stub.PostModelOutputs(

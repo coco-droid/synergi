@@ -5,15 +5,14 @@ from agent.contextual import ContextConversation
 from others.og import OpenGraphScraper
 from werkzeug.utils import secure_filename
 import json
-import eventlet 
 import os
 #launch redis-server  in another console
 
 print("redis is launch")
 app = Flask(__name__)
-socketio = SocketIO(app, async_mode='eventlet') 
+socketio = SocketIO(app) 
 synergi = SynergiAgent()
-
+#store emit in a global variable 
 @socketio.on('connect')
 def on_connect():
   print('Client connected')
@@ -23,16 +22,16 @@ def on_disconnect():
   print('Client disconnected')
 
 @socketio.on('message')
-def handle_message(msg,socketio=socketio):
+def handle_message(msg):
   try:
     print(f"Received message: {msg}")
     txt = msg['sendMessage']
-    response = synergi.handle_message(txt,socketio)
+    response = synergi.handle_message(txt,emit)
   except Exception as e:
     print(f"Error: {e}")
     response = "Désolé, une erreur s'est produite lors du traitement de votre requête."
 
-  emit('message', {'message': response})
+  #emit('message', {'message': response})
 @socketio.on('delete_history')
 def delete_history(msg):
   print(f"Received : {msg}")
@@ -93,7 +92,21 @@ def upload_file():
     return json.dumps({'success': True, 'file': {'url': file_url}})
 
 
-
+@app.route('/message', methods=['POST'])
+def user_message():
+   print('lol me')
+   request_data = request.get_json()
+   print(request_data)
+   try:
+    print(f"Received message: {request_data['sendMessage']}")
+    txt = request_data['sendMessage']
+    print(request)
+    response = synergi.handle_message(txt,emit)
+   except Exception as e:
+    print(f"Error me this: {e}")
+    response=e
+    #response = "Désolé, une erreur s'est produite lors du traitement de votre requête."
+   return {'msg':response}
 @app.route('/api', methods=['POST'])  
 def api_message():
   content = request.get_json()

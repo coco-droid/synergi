@@ -15,7 +15,7 @@ class SynergiAgent:
       self.procedural_memory = ProceduralMemory()
     
 
-  def handle_message(self,message,websocket):
+  def handle_message(self,message,emit):
       print(f"intent analyzer: {self.intent_analyzer}")
       data = self.intent_analyzer.predict(message)
 
@@ -43,6 +43,8 @@ class SynergiAgent:
       if "goals_detailed" in data :
         #task=Task(data["goal"],data["goals_detailed"])
         pass 
+      print(emit)
+      #emit('message', {'message': data["synergi_say"]})
       test1=Speech(data["synergi_say"],'local')
       test1.play_audio()
       return data["synergi_say"]
