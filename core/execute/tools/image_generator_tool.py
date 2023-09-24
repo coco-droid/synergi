@@ -4,7 +4,7 @@ from PIL import Image
 from io import BytesIO
 import requests
 
-def generate_image(prompt,model):
+def image_generator_tool(prompt,model):
       image_data=''
       if model=='dalle':
           try:

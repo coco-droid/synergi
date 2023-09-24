@@ -6,7 +6,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains import RetrievalQA, ConversationalRetrievalChain
 from langchain.prompts import PromptTemplate
 import os
-import PyPDF2
+from PyPDF2 import PdfReader
 from pdf2image import convert_from_path
 from docx import Document
 from ebooklib import epub
@@ -24,53 +24,13 @@ class DocumentChatbot:
         self.vector_index = None
         self.retriever = None
         self.qa_interface = None
-        self.init_langchain_components()
-
-    def init_langchain_components(self):
-        # Création d'un index de vecteurs à partir de documents
-        document_loaders = [UnstructuredFileLoader, PyPDFLoader, UnstructuredWordDocumentLoader, MWDumpLoader, UnstructuredPowerPointLoader, CSVLoader]
-        documents = []
-
-        for loader in document_loaders:
-            documents.extend(self.load_documents_with_loader(loader))
-
-        self.create_and_save_vector_index(documents)
-
-        # Configuration du récupérateur et de l'interface de questions-réponses
-        self.retriever = self.init_retriever()
-        self.qa_interface = self.init_qa_interface()
-
-    def load_documents_with_loader(self, loader):
-        documents = []
-        # Remplacez les chemins par les chemins de vos documents
-        document_paths = ["document1.pdf", "document2.docx", "document3.epub", "document4.txt"]
-        
-        for document_path in document_paths:
-            if os.path.isfile(document_path):
-                with open(document_path, 'rb') as file:
-                    doc_loader = loader(file_path=document_path)
-                    doc = doc_loader.load_and_split(self.text_splitter)
-                    documents.extend(doc)
-
-        return documents
-
-    def create_and_save_vector_index(self, documents):
-        if not os.path.exists(self.vector_index_directory):
-            os.makedirs(self.vector_index_directory)
-
-        # Création de l'index de vecteurs
-        embeddings = OpenAIEmbeddings(deployment="text-embedding-ada-002", chunk_size=1)
-        self.vector_index = FAISS.from_documents(documents, embeddings)
-        
-        # Sauvegarde de l'index de vecteurs
-        self.vector_index.save_local(self.vector_index_directory)
-
+ 
     def init_retriever(self):
         # Configuration du récupérateur
         retriever = self.vector_index.as_retriever(search_type="similarity", search_kwargs={"k": 6})
         return retriever
 
-    def init_qa_interface(self):
+    def init_qa_interface(self,prompt):
         # Configuration de l'interface de questions-réponses
         qa_interface = RetrievalQA.from_chain_type(
             llm=ChatOpenAI(),
@@ -78,18 +38,25 @@ class DocumentChatbot:
             retriever=self.retriever,
             return_source_documents=True,
         )
-        return qa_interface
+        return qa_interface(prompt)
 
     def predict_QA(self, prompt, document_path):
         # Chargement du texte à partir du document
         document_text = self.load_text_from_document(document_path)
         
         # Recherche de questions-réponses basée sur le prompt et le texte du document
-        response = self.qa_interface(
-            f"{document_text}\nPrompt: {prompt}"
-        )
-        
-        return response["result"]
+        #response = self.qa_interface(
+          #  f"{document_text}\nPrompt: {prompt}"
+        #)
+        document_text=self.split_text(document_text)
+        print(document_text)
+        self.create_vectors(document_text)
+        self.retrieve_vectors()
+        print(self.retriever)
+        pkj=self.init_qa_interface(prompt)["result"]
+        print(pkj)
+        return 'la'
+        #return response["result"]
 
     def load_text_from_document(self, document_path):
         file_extension = os.path.splitext(document_path)[-1].lower()
@@ -109,10 +76,10 @@ class DocumentChatbot:
 
     def extract_text_from_pdf(self, document_path):
         text = ""
-        pdf = PyPDF2.PdfFileReader(open(document_path, "rb"))
-        for page_num in range(pdf.getNumPages()):
-            page = pdf.getPage(page_num)
-            text += page.extractText()
+        pdf = PdfReader(open(document_path, "rb"))
+        for page_num in range(len(pdf.pages)):  # Use len(pdf.pages) to get the number of pages
+          page = pdf.pages[page_num]
+          text += page.extract_text()
         return text
 
     def extract_text_from_docx(self, document_path):
@@ -134,15 +101,29 @@ class DocumentChatbot:
         with open(document_path, "r", encoding="utf-8") as file:
             text = file.read()
         return text
+    def split_text(self,text):
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+        texts = text_splitter.create_documents([text])
+        return texts
+    def create_vectors(self,text):
+        directory = 'index_store'
+        vector_index = FAISS.from_documents(text, OpenAIEmbeddings())
+        vector_index.save_local(directory)
+    def retrieve_vectors(self):
+        vector_index = FAISS.load_local("index_store", OpenAIEmbeddings())
+        self.retriever = vector_index.as_retriever(search_type="similarity", search_kwargs={"k": 6})
+
+class VideoChatbot:
+    def __init__():
 
 # Exemple d'utilisation
 if __name__ == "__main__":
-    openai_api_key = "Your OpenAI API Key"
+    openai_api_key = ''
     bot = DocumentChatbot(openai_api_key)
 
     # Posez une question basée sur un document
-    prompt = "Quelles sont les principales conclusions du rapport annuel 2022 ?"
-    document_path = "document1.pdf"  # Remplacez par le chemin de votre document
-    response = bot.predict_QA(prompt, document_path)
+    prompt = "Resume ce livre"
+      # Remplacez par le chemin de votre document
+    response = bot.predict_QA(prompt,"GSE_7-2.pdf")
     print("Réponse basée sur le document :")
     print(response)
