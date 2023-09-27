@@ -10,14 +10,32 @@ from PyPDF2 import PdfReader
 from pdf2image import convert_from_path
 from docx import Document
 from ebooklib import epub
+import requests
+from bs4 import BeautifulSoup
 import faiss
 from typing import List
+import re
+from youtube_transcript_api import YouTubeTranscriptApi
+from params.config import APIKeyManager
+dirname = os.path.dirname("/home/t4u/Desktop/suck/synergi/core/")
+static_dir=os.path.join(dirname, "static")
+def  docs_chat_tool(prompt,path,types):
+       if(types=="youtube"):
+            bot = VideoChatbot()
+            return bot.QA_video(url,'')
+       elif(types=="document"):
+            bot=DocumentChatbot()
+            return bot.predict_QA(prompt,f"{static_dir}/{path}")
+       elif(types=="website"):
+            bot=WebsiteChat()
+            return QA_website()
+       else:
+           print('no type specify')
 
 class DocumentChatbot:
-    def __init__(self, openai_api_key, vector_index_directory='index_store'):
+    def __init__(self,vector_index_directory='index_store'):
         # Configuration de l'API OpenAI
-        os.environ["OPENAI_API_KEY"] = openai_api_key
-
+        os.environ["OPENAI_API_KEY"] =APIKeyManager().get_api_key('openai_key') 
         # Initialisation des composants LangChain
         self.text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
         self.vector_index_directory = vector_index_directory
@@ -55,7 +73,7 @@ class DocumentChatbot:
         print(self.retriever)
         pkj=self.init_qa_interface(prompt)["result"]
         print(pkj)
-        return 'la'
+        return pkj
         #return response["result"]
 
     def load_text_from_document(self, document_path):
@@ -114,16 +132,69 @@ class DocumentChatbot:
         self.retriever = vector_index.as_retriever(search_type="similarity", search_kwargs={"k": 6})
 
 class VideoChatbot:
-    def __init__():
+      def __init__(self):
+         print('lol')
 
-# Exemple d'utilisation
-if __name__ == "__main__":
-    openai_api_key = ''
-    bot = DocumentChatbot(openai_api_key)
+      def  QA_video(self,path,types):
+          if(types=='local'):
+            print('lol2')
+          elif(types=='web'):
+            print('lol3')
+          else:
+             #get the id of the youtube video first 
+             def get_video_id(url):
+                youtube_url_pattern = r'(https?://)?(www\.)?youtube\.com/watch\?v=([a-zA-Z0-9_-]+)'
+                youtube_short_url_pattern = r'(https?://)?(www\.)?youtu\.be/([a-zA-Z0-9_-]+)'
+                match = re.search(youtube_url_pattern, url) or re.search(youtube_short_url_pattern, url)
+                if match:
+                      video_id = match.group(3)
+                      print(f"Video ID: {video_id}")
+                      return video_id
+                else:
+                   print(f"Invalid YouTube URL: {url}")
+             
+             
+             print(YouTubeTranscriptApi.get_transcript('jd0TyMFnkOM',languages=['fr', 'en']))
+             
+ 
+class WebsiteChat:
+      def __init__(self):
+        self.retriever=''
+        print("chat with website")
+      def  QA_website(self,url,prompt):
+                try:
+                   response = requests.get(url)
+                   if response.status_code == 200:
+                      soup = BeautifulSoup(response.text, 'html.parser')
+                      text_elements = soup.find_all(text=True)
+                      website_text = ' '.join(text.strip() for text in text_elements if text.strip())
+                      website_text=self.split_text(website_text)
+                      self.create_vectors(website_text)
+                      self.retrieve_vectors()
+                      print(self.init_qa_interface(prompt))
+                   else:
+                       print(f"Failed to retrieve content. Status code: {response.status_code}")
+                except Exception as e:
+                   print(f"An error occurred: {str(e)}")
+                   return None
+      def split_text(self,text):
+          text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+          texts = text_splitter.create_documents([text])
+          return texts
+      def create_vectors(self,text):
+          directory = 'index_store2'
+          vector_index = FAISS.from_documents(text, OpenAIEmbeddings())
+          vector_index.save_local(directory)
+      def retrieve_vectors(self):
+          vector_index = FAISS.load_local("index_store2", OpenAIEmbeddings())
+          self.retriever = vector_index.as_retriever(search_type="similarity", search_kwargs={"k": 6})
+      def init_qa_interface(self,prompt):
+        # Configuration de l'interface de questions-réponses
+        qa_interface = RetrievalQA.from_chain_type(
+            llm=ChatOpenAI(),
+            chain_type="stuff",
+            retriever=self.retriever,
+            return_source_documents=True,
+        )
+        return qa_interface(prompt)
 
-    # Posez une question basée sur un document
-    prompt = "Resume ce livre"
-      # Remplacez par le chemin de votre document
-    response = bot.predict_QA(prompt,"GSE_7-2.pdf")
-    print("Réponse basée sur le document :")
-    print(response)

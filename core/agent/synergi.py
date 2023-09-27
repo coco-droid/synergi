@@ -2,6 +2,8 @@ from agent.intent import IntentAnalyzer
 from memory.episodic import EpisodicMemory
 from memory.procedural import ProceduralMemory
 from execute.executor import Executor
+from execute.tools.image_generator_tool import image_generator_tool
+from execute.tools.docs_chat_tool import docs_chat_tool
 import os
 from Task.task import Task
 from TTS.speech import Speech
@@ -43,9 +45,12 @@ class SynergiAgent:
       if "goals_detailed" in data :
         #task=Task(data["goal"],data["goals_detailed"])
         pass 
+     
       print(emit)
       #emit('message', {'message': data["synergi_say"]})
       test1=Speech(data["synergi_say"],'local')
       test1.play_audio()
       return data["synergi_say"]
-   
+  def handle_message_with_files(self,message,filename):
+      test=docs_chat_tool(message,filename,'document')
+      return test 

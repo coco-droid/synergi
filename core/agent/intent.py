@@ -38,7 +38,8 @@ class IntentAnalyzer:
                     "action": None,
                     "goal": None,
                     "steps": [],
-                    "predicted_keys": []
+                    "predicted_keys": [],
+                    "create_image":""
                 }
 
         date = datetime.now().strftime("%Y-%m-%d")
@@ -55,6 +56,7 @@ class IntentAnalyzer:
             For example, you might write: 'I can understand why you feel that way. Here's my perspective on the situation and some options I recommend exploring...' make the conversation flow naturally like humans do.",
           "action": "Describe the helpful actions to execute when the user demand  ",
           "goal": "A complex task to do for the user ",
+          "create_image":"a prompt text to create a image if user demand to create a image for them",
           "goal_details": "Tips for achieving the goal",
           "lauch_app": "if user want to open a apps ",
           "get_episodic_data": "Keywords for relevant memories.",

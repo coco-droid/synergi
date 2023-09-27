@@ -73,7 +73,7 @@ def read_scrape(urls):
        emit('opengraph_data',response)
 
 UPLOAD_FOLDER = 'uploads'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config[''] = UPLOAD_FOLDER
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -86,7 +86,7 @@ def upload_file():
         return jsonify({'error': 'No selected file'})
 
     filename = secure_filename(file.filename)
-    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    file_path = os.path.join('static', filename)
     file.save(file_path)
     file_url = file_path  # Replace with your domain and path
     return json.dumps({'success': True, 'file': {'url': file_url}})
@@ -98,10 +98,16 @@ def user_message():
    request_data = request.get_json()
    print(request_data)
    try:
-    print(f"Received message: {request_data['sendMessage']}")
-    txt = request_data['sendMessage']
-    print(request)
-    response = synergi.handle_message(txt,emit)
+    if (request_data['haveFile']):
+        print(f"Received message: {request_data['sendMessage']} with file:{request_data['name']} ")
+        txt = request_data['sendMessage']
+        print(request)
+        response = synergi.handle_message_with_files(txt,request_data['name'].replace(" ", "_"))
+    else:
+        print(f"Received message: {request_data['sendMessage']}")
+        txt = request_data['sendMessage']
+        print(request)
+        response = synergi.handle_message(txt,emit)
    except Exception as e:
     print(f"Error me this: {e}")
     response=e

@@ -38,6 +38,10 @@
 
 
 #je veux acceder a la fonction lauch du script python ce trouvant dans /execute/tools/apps_launcher.py
-from execute.tools.image_generator_tool import generate_image
+#from execute.tools.image_generator_tool import generate_image
 
-generate_image('a cute dog','dalle')
+#generate_image('a cute dog','dalle')
+
+from execute.tools.docs_chat_tool import docs_chat_tool
+test=docs_chat_tool('how this document talk about??','GSE_7-2.pdf','document')
+print(test)
