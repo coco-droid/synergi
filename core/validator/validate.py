@@ -1,7 +1,7 @@
 from llms.llms import Model  
 class  retroactive_validator:
      def __init__(self,master_prompt):
-        
+         self.master_prompt=master_prompt
      def validate(self,result):
             def extract_json(text):
                print("the init")
@@ -35,7 +35,7 @@ class  retroactive_validator:
             else:
                print("The response is not valid activate retroaction!!!")
                return self.corrector(master_prompt,result.response,response['corrector_prompt'],response['type_of_response'])
-     def corrector(prompt,old_response,corrector_prompt,type_of_response)
+     def corrector(prompt,old_response,corrector_prompt,type_of_response):
           model = Model("gpt3", master_prompt=prompt, api_key="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")
           text_given="""
               your old response:{old_response}\n

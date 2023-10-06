@@ -130,12 +130,12 @@ class ContextConversation:
             if entry["Date"] == today_date:
                 entry["summary"] = self.long_summary
                 break
-        else:
-            summary_entry = {
-                "summary": self.long_summary,
-                "Date": today_date
-            }
-            all_history.append(summary_entry)
+            else:
+                summary_entry = {
+                   "summary": self.long_summary,
+                   "Date": today_date
+                }
+                all_history.append(summary_entry)
 
         redis_client.set("all_history", json.dumps(all_history))
     def get_today_conversation_on_redis(self):

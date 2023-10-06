@@ -2,14 +2,31 @@ let filepreview ,filebol,fileData,fileName;
 let file_preview=document.querySelector('.file_preview');
   // Client side 
 // Listen for event
-/*socket.on('message', (data) => {
-  displayMessage(data,'bot');
-});*/
-socket.on('image_gen',(data)=>{
+socket.on('message', (data) => {
+  console.log(data)
+});
+function parseMarkdownAndLatex(text) {
+  // Parse Markdown tags
+  text = text.replace(/<markdown>([\s\S]*?)<\/markdown>/g, function(match, p1) {
+    return '<div class="markdown">' + marked(p1) + '</div>';
+  });
+
+  // Parse LaTeX tags using MathJax
+  text = text.replace(/<latex>([\s\S]*?)<\/latex>/g, function(match, p1) {
+    //render with mathjax before returning
+    p1=MathJax.tex2chtml(p1).outerHTML;
+    console.log('text:'+p1);
+    return '<div class="latex">' + p1 + '</div>';
+  });
+
+  return text;
+}
+socket.on('imagegen',(data)=>{
+  console.log('methi')
   document.querySelector('.chat__conversation-board').innerHTML += parseMarkdownAndLatex(`
   <div class="chat__conversation-board__message-container">
          <div class="chat__conversation-board__message__context">
-           <div class="chat__conversation-board__message__bubble"><img src="${data.url}" style="width:100%;height:100%;" /></div>
+           <div class="chat__conversation-board__message__bubble"><img src="http://localhost:5000/static/${data.image}" style="width:100%;height:100%;" /></div>
          </div>
          <div class="chat__conversation-board__message__options">
            <button class="btn-icon chat__conversation-board__message__option-button option-item emoji-button">
@@ -89,6 +106,7 @@ function sendMessage() {
     fetchOnserver('http://localhost:5000/message',{sendMessage: message,file:fileData,name:fileName,haveFile:true},function(res){
       displayMessage({message:res.msg},'bot');
     })
+    filebol=false;
   }
   else{
     displayMessage({message: message}, 'user');
@@ -258,7 +276,7 @@ codeBlocks.forEach((codeBlock) => {
   codeBlock.parentNode.insertBefore(copyButton, codeBlock.parentNode.firstChild);
 });
       }
-      function parseMarkdownAndLatex(text) {
+  function parseMarkdownAndLatex(text) {
   // Parse Markdown tags
   text = text.replace(/<markdown>([\s\S]*?)<\/markdown>/g, function(match, p1) {
     return '<div class="markdown">' + marked(p1) + '</div>';

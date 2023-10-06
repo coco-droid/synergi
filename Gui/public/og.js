@@ -3,7 +3,9 @@ const socket = io('http://localhost:5000');
 socket.on('connect', () => {
   console.log('Connected to server');
 });
-
+socket.on('image',()=>{
+  console.log('image')
+})
 function handleOpenGraphPreviews(bubbleAttribute) {
     const bubbles = document.querySelectorAll(`${bubbleAttribute}`);
     const processedUrls = new Set();
@@ -56,4 +58,35 @@ function createLinkContent(url, ogId) {
     
 }
 */
+function SSEClient(url) {
+    this.eventListeners = {};
 
+    this.eventSource = new EventSource(url);
+
+    this.eventSource.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+
+        if (data.event && this.eventListeners[data.event]) {
+            this.eventListeners[data.event](data.data);
+        }
+    }.bind(this);
+
+    this.addEventListener = function(event, callback) {
+        this.eventListeners[event] = callback;
+    };
+
+    this.removeEventListener = function(event) {
+        delete this.eventListeners[event];
+    };
+
+    this.close = function() {
+        this.eventSource.close();
+    };
+}
+
+var source = new EventSource("http://localhost:5000/event_synergi");
+source.addEventListener('synergi_event', function(event) {
+    var data = JSON.parse(event.data);
+    console.log(data)
+    // do what you want with this data
+}, false);

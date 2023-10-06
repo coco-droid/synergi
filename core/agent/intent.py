@@ -6,6 +6,7 @@ from llms.llms import Model
 from agent.contextual import ContextConversation
 from execute.tools.apps_launcher_tool import apps_launcher_tool
 from datetime import datetime
+from validator.validate import retroactive_validator
 PROMPT_PREDICT_KEYS = """
 En vous basant sur le contexte conversationnel fourni, prédire une liste de 1 à 5 clés candidates dans la mémoire épisodique pouvant être pertinentes:
 """
@@ -80,6 +81,8 @@ YOU MUST BE RETURN A JSON LIKE THIS:
         user_message =username+"say:"+message+"\nsynerige_json_response:"
         response = model.generate_text(user_message)
         print(response)
+        #valid_me=retroactive_validator(master_prompt)
+        #response=valid_me.validate(response)
         data = extract_json(response)
 
         if "lauch_app" in data and data["lauch_app"] != None and data["lauch_app"] != "":
