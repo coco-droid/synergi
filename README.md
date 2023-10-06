@@ -4,7 +4,7 @@
 
 **Screenshot:**
 
-![Synergi Screenshot](./Gui/screenshort.png)
+![Synergi Screenshot](./screenshort.png)
 
 <p align="center">
   <a href="https://github.com/synergi/synergi/stargazers">
@@ -76,4 +76,4 @@ Please note that Synergi is still under construction and in the testing phase. E
 Synergi is designed to be extensible. You can easily add new tools and functionalities that Synergi can execute, such as browsing tools or other utilities. Explore the possibilities and contribute to making Synergi even more powerful!
 
 Enjoy your journey with Synergi, your reliable open-source AI assistant.
-```
+
