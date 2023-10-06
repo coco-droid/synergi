@@ -1,6 +1,6 @@
 # Synergi - Your Open Source AI Assistant 🤖
 
-![Synergi Preview](./Gui/preview.png)
+![Synergi Preview](./Gui/public/preview.png)
 
 **Screenshot:**
 
