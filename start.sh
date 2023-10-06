@@ -9,6 +9,10 @@ python3 "$FLASK_APP_PATH" &
 # Attendre quelques secondes pour que le serveur Flask démarre complètement
 sleep 5
 
+# Lancement du serveur Redis (assurez-vous que Redis est installé)
+echo "Lancement du serveur Redis..."
+redis-server &
+
 # Chemin d'accès au dossier Gui
 GUI_DIR="./Gui"
 

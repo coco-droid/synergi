@@ -3,17 +3,21 @@
 # Détection de la plateforme
 PLATFORM="$(uname -s)"
 
+SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
+
+# ...
+
 # Fonction pour créer un raccourci sur le bureau (Linux)
 create_desktop_shortcut_linux() {
   echo "Création du raccourci sur le bureau (Linux)..."
   # Assurez-vous que le chemin d'accès au script de démarrage est correct
-  START_SCRIPT="./start.sh"
+  START_SCRIPT="$SCRIPT_DIR/start.sh"
   DESKTOP_DIR="$HOME/Desktop"
   echo "[Desktop Entry]
 Name=Synergi
 Exec=$START_SCRIPT
 Type=Application
-Icon=./GUI/preview.png
+Icon=$SCRIPT_DIR/GUI/preview.png
 " > "$DESKTOP_DIR/Synergi.desktop"
   chmod +x "$DESKTOP_DIR/Synergi.desktop"
   echo "Raccourci créé sur le bureau."
@@ -23,7 +27,7 @@ Icon=./GUI/preview.png
 create_desktop_shortcut_macos() {
   echo "Création du raccourci sur le bureau (macOS)..."
   # Assurez-vous que le chemin d'accès au script de démarrage est correct
-  START_SCRIPT="./start.sh"
+  START_SCRIPT="$SCRIPT_DIR/start.sh"
   DESKTOP_DIR="$HOME/Desktop"
   echo "#!/bin/bash
 $START_SCRIPT" > "$DESKTOP_DIR/Synergi.command"
@@ -35,7 +39,7 @@ $START_SCRIPT" > "$DESKTOP_DIR/Synergi.command"
 create_desktop_shortcut_windows() {
   echo "Création du raccourci sur le bureau (Windows)..."
   # Assurez-vous que le chemin d'accès au script de démarrage est correct
-  START_SCRIPT="./start.sh"
+  START_SCRIPT="$SCRIPT_DIR/start.sh"
   DESKTOP_DIR="$HOME/Desktop"
   ln -s "$START_SCRIPT" "$DESKTOP_DIR/Synergi.lnk"
   echo "Raccourci créé sur le bureau."
@@ -45,12 +49,11 @@ create_desktop_shortcut_windows() {
 create_quick_launch_shortcut_windows() {
   echo "Création du raccourci dans la barre d'accès rapide (Windows)..."
   # Assurez-vous que le chemin d'accès au script de démarrage est correct
-  START_SCRIPT="./start.sh"
+  START_SCRIPT="$SCRIPT_DIR/start.sh"
   QUICK_LAUNCH_DIR="$APPDATA/Microsoft/Internet Explorer/Quick Launch"
   ln -s "$START_SCRIPT" "$QUICK_LAUNCH_DIR/Synergi.lnk"
   echo "Raccourci créé dans la barre d'accès rapide."
 }
-
 # Vérification de la présence de Python
 if command -v python3 >/dev/null 2>&1; then
   echo "Python est déjà installé."
@@ -103,12 +106,12 @@ fi
 
 # Installation des dépendances Python pour le serveur Flask
 echo "Installation des dépendances Python pour le serveur Flask..."
-pip install -r ./core/requirements.txt
+#pip install -r ./core/requirements.txt
 
 # Installation des dépendances Node.js pour l'application Electron
 echo "Installation des dépendances Node.js pour l'application Electron..."
 cd ./GUI
-npm install
+#npm install
 
 # Création du raccourci en fonction de la plateforme
 if [ "$PLATFORM" == "Linux" ]; then
@@ -120,4 +123,32 @@ elif [ "$PLATFORM" == "Windows" ]; then
   create_quick_launch_shortcut_windows
 fi
 
+install_redis_linux() {
+  echo "Installation de Redis Server (Linux)..."
+  if [ "$PLATFORM" == "Linux" ]; then
+    sudo apt-get update
+    sudo apt-get install redis-server
+  elif [ "$PLATFORM" == "Darwin" ]; then
+    # Vous pouvez spécifier ici les étapes d'installation pour macOS si nécessaire
+    echo "L'installation de Redis Server sur macOS n'est pas prise en charge automatiquement."
+    echo "Veuillez consulter la documentation officielle pour l'installation sur macOS."
+  fi
+}
+
+# ...
+
+# Vérification de la présence de Redis Server
+if command -v redis-server >/dev/null 2>&1; then
+  echo "Redis Server est déjà installé."
+else
+  if [ "$PLATFORM" == "Windows" ]; then
+    echo "Redis Server n'est pas installé sur votre système Windows."
+    echo "Veuillez télécharger et installer Redis Server à partir du site officiel :"
+    echo "https://redis.io/download"
+    echo "Une fois Redis Server installé, relancez ce script."
+    exit 1
+  else
+    install_redis_linux
+  fi
+fi
 echo "L'installation est terminée. Vous pouvez maintenant exécuter votre application en cliquant sur le raccourci \"Synergi\"."
