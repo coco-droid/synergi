@@ -119,17 +119,25 @@ function sendMessage() {
   document.querySelector('.message-input').value = '';
 }
 //function display message
-function displayMessage(data, type) {
-
+async function displayMessage(data, type) {
+//generate a hash for the message and the time we receive them 
+let currentTime = new Date().getTime();
+let messageWithTime = data.message+ currentTime;
+const hash = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(messageWithTime)).then( async function (hashBuffer) {
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return await hashHex
+});
+console.log('hash:'+hash);
   if(type=="bot"){//#9991f698
   //display message in the chat
    document.querySelector('.chat__conversation-board').innerHTML += parseMarkdownAndLatex(`
    <div class="chat__conversation-board__message-container">
           <div class="chat__conversation-board__message__context">
-            <div class="chat__conversation-board__message__bubble"> <span style=" background-color: #1F71D7ff;">${data.message}</span></div>
+            <div class="chat__conversation-board__message__bubble"> <span style=" background-color: #1F71D7ff;" data-id="${hash}">${data.message}</span></div>
           </div>
           <div class="chat__conversation-board__message__options">
-            <button class="btn-icon chat__conversation-board__message__option-button option-item emoji-button">
+            <button class="btn-icon chat__conversation-board__message__option-button option-item emoji-button" onclick="emoji_react(this,'${hash}')">
               <svg class="feather feather-smile sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <circle cx="12" cy="12" r="10"></circle>
                 <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
@@ -137,13 +145,14 @@ function displayMessage(data, type) {
                 <line x1="15" y1="9" x2="15.01" y2="9"></line>
               </svg>
             </button>
-            <button class="btn-icon chat__conversation-board__message__option-button option-item more-button">
+            <button class="btn-icon chat__conversation-board__message__option-button option-item more-button" onclick="more_react(this,'${hash}')">
               <svg class="feather feather-more-horizontal sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <circle cx="12" cy="12" r="1"></circle>
                 <circle cx="19" cy="12" r="1"></circle>
                 <circle cx="5" cy="12" r="1"></circle>
               </svg>
             </button>
+            <button class="btn-icon reply-react" onclick="reply_react(this,'${hash}',"synergi")"><i class="fa fa-reply" aria-hidden="true"></i></button>
           </div>
         </div>`);
       }
@@ -154,14 +163,14 @@ function displayMessage(data, type) {
         document.querySelector('.chat__conversation-board').innerHTML += parseMarkdownAndLatex(`
         <div class="chat__conversation-board__message-container reversed">
           <div class="chat__conversation-board__message__context">
-            <div class="chat__conversation-board__message__bubble"> <span style="background-color:#123D7Bff;">
+            <div class="chat__conversation-board__message__bubble"> <span data-id="${hash}" style="background-color:#123D7Bff;">
               <div style="display:flex; padding:5px;" class='preview-chat'>
                    ${filepreview}
               </div>
               ${data.message}</span></div>
           </div>
           <div class="chat__conversation-board__message__options">
-            <button class="btn-icon chat__conversation-board__message__option-button option-item emoji-button">
+            <button class="btn-icon chat__conversation-board__message__option-button option-item emoji-button" onclick="emoji_react(this,'${hash}')" >
               <svg class="feather feather-smile sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <circle cx="12" cy="12" r="10"></circle>
                 <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
@@ -169,13 +178,14 @@ function displayMessage(data, type) {
                 <line x1="15" y1="9" x2="15.01" y2="9"></line>
               </svg>
             </button>
-            <button class="btn-icon chat__conversation-board__message__option-button option-item more-button">
+            <button class="btn-icon chat__conversation-board__message__option-button option-item more-button" onclick="more_react(this,'${hash}')">
               <svg class="feather feather-more-horizontal sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <circle cx="12" cy="12" r="1"></circle>
                 <circle cx="19" cy="12" r="1"></circle>
                 <circle cx="5" cy="12" r="1"></circle>
               </svg>
             </button>
+            <button class="btn-icon reply-react" onclick="reply_react(this,'${hash}')"><i class="fa fa-reply" aria-hidden="true"></i></button>
           </div>
         </div>
         `);
@@ -222,10 +232,10 @@ function displayMessage(data, type) {
       else{//#f52cf580
         document.querySelector('.chat__conversation-board').innerHTML += parseMarkdownAndLatex(` <div class="chat__conversation-board__message-container reversed">
           <div class="chat__conversation-board__message__context">
-            <div class="chat__conversation-board__message__bubble"> <span style="background-color:#123D7Bff;">${data.message}</span></div>
+            <div class="chat__conversation-board__message__bubble"> <span style="background-color:#123D7Bff;" data-id="${hash}">${data.message}</span></div>
           </div>
           <div class="chat__conversation-board__message__options">
-            <button class="btn-icon chat__conversation-board__message__option-button option-item emoji-button">
+            <button class="btn-icon chat__conversation-board__message__option-button option-item emoji-button"  onclick="emoji_react(this,'${hash}')">
               <svg class="feather feather-smile sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <circle cx="12" cy="12" r="10"></circle>
                 <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
@@ -233,13 +243,14 @@ function displayMessage(data, type) {
                 <line x1="15" y1="9" x2="15.01" y2="9"></line>
               </svg>
             </button>
-            <button class="btn-icon chat__conversation-board__message__option-button option-item more-button">
+            <button class="btn-icon chat__conversation-board__message__option-button option-item more-button" onclick="more_react(this,'${hash}')">
               <svg class="feather feather-more-horizontal sc-dnqmqq jxshSx" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <circle cx="12" cy="12" r="1"></circle>
                 <circle cx="19" cy="12" r="1"></circle>
                 <circle cx="5" cy="12" r="1"></circle>
               </svg>
             </button>
+            <button class="btn-icon reply-react" onclick="reply_react(this,'${hash}','You')"><i class="fa fa-reply" aria-hidden="true"></i></button>
           </div>
         </div>`);
       }
@@ -411,26 +422,7 @@ elem.addEventListener("drop", async (e) => {
                     <i class="fa-solid fa-xmark" id="close"></i>
                   </span>
       `;
-        document.querySelector('.chat__conversation-board').style.height="calc(100vh - 95px - 2em - .5em - 5em)"
-      //display file preview like a floating tooltip on top of the chat conversational board
-        var chat_board=document.querySelector('.chat__conversation-panel');
-        file_preview.innerHTML=filepreview;
-        //get chat board height
-        var chat_board_height=chat_board.offsetHeight;
-        //position the file preview tooltip
-        //file_preview.style.top=chat_board.offsetTop-chat_board_height-10+"px";
-        file_preview.style.height=50+"px";
-        //file_preview.style.left=chat_board.offsetLeft+9+"px";
-        //file_preview.style.position="absolute";
-        //z-index
-       // file_preview.style.zIndex="1000";
-        //display file preview  height: calc(100vh - 95px - 2em - .5em - 3em);
-        file_preview.style.display="flex";
-        document.querySelector('#close').addEventListener('click',async ()=>{
-          document.querySelector('.chat__conversation-board').style.height="calc(100vh - 95px - 2em - .5em - 3em)"
-          file_preview.style.display='none';
-          filepreview='';
-        })
+        previewbox(filepreview)
         fileData = await file.arrayBuffer();
         const formData = new FormData();
         formData.append("file", file);
